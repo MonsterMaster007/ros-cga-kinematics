@@ -1,0 +1,21 @@
+# Mark these as dependent joints, but handle this dependency yourself,
+# instead of letting the joint_state_publisher doing it, since it can't handle
+# all the dependency.
+# Put these here so they don't show up on the gui, although the results
+# are just ignored.
+dependent_joints:
+    upper_to_elbow_1: {parent: base_to_upper_1, factor: 0 }
+    upper_to_elbow_2: {parent: base_to_upper_2, factor: 0 }
+    upper_to_elbow_3: {parent: base_to_upper_3, factor: 0 }
+    elbow_to_lower_left_1: {parent: base_to_upper_1, factor: 0 }
+    elbow_to_lower_left_2: {parent: base_to_upper_2, factor: 0 }
+    elbow_to_lower_left_3: {parent: base_to_upper_3, factor: 0 }
+    elbow_to_lower_right_1: {parent: base_to_upper_1, factor: 0 }
+    elbow_to_lower_right_2: {parent: base_to_upper_2, factor: 0 }
+    elbow_to_lower_right_3: {parent: base_to_upper_3, factor: 0 }
+    lower_left_to_lower_bot_1: {parent: base_to_upper_1, factor: 0 }
+    lower_left_to_lower_bot_2: {parent: base_to_upper_2, factor: 0 }
+    lower_left_to_lower_bot_3: {parent: base_to_upper_3, factor: 0 }
+    lower_bot_to_end_effector_1: {parent: base_to_upper_1, factor: 0 }
+    lower_bot_to_end_effector_2: {parent: base_to_upper_2, factor: 0 }
+    lower_bot_to_end_effector_3: {parent: base_to_upper_3, factor: 0 }

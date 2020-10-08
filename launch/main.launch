@@ -1,0 +1,50 @@
+<launch>
+    <!-- Provide the robot_description in the standard urdf format, but with
+    the shared link split up to produce a number of chains. -->
+    <param name="robot_description"
+        command="xacro '$(find cga_kinematics)/model/delta.urdf.xacro'"/>
+
+    <!-- Simple here to make certain joints get ignored by
+    joint_state_publisher_gui. Can be used to setup dependent joints, but
+    we are doing this manually, so ignore it here -->
+    <rosparam
+        file="$(find cga_kinematics)/config/dependent_joints.yaml"
+        command="load"
+    />
+
+    <!-- Start joint_state_publisher_gui to create a gui for controlling
+    joint angles -->
+    <node
+        pkg="joint_state_publisher_gui"
+        type="joint_state_publisher_gui"
+        name="joint_state_publisher_gui">
+        <remap from="joint_states" to="joint_states_in"/>
+    </node>
+
+    <!-- Load loops parameter, which specifies which links should be constrained
+    together to form loops -->
+    <rosparam
+        file="$(find cga_kinematics)/config/loops.yaml"
+        command="load"
+    />
+
+    <node
+        name="cga_fk"
+        pkg="cga_kinematics"
+        type="cga_fk"
+        output="screen">
+        <remap from="joint_states_out" to="joint_states"/>
+    </node>
+
+    <node 
+        pkg="robot_state_publisher" 
+        type="robot_state_publisher"
+        name="robot_state_publisher"
+        output="screen"
+    />
+
+    <node
+        name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find cga_kinematics)/config/default.rviz"
+    />
+</launch>

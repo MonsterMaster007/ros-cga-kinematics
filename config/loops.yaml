@@ -1,0 +1,18 @@
+loops:
+    - parents:
+        - end_effector_1
+        - end_effector_2
+        - end_effector_3
+      child: end_effector
+    - parents:
+        - lower_left_bot_1
+        - lower_right_bot_1
+      child: lower_left_bot_1
+    - parents:
+        - lower_left_bot_2
+        - lower_right_bot_2
+      child: lower_left_bot_2
+    - parents:
+        - lower_left_bot_3
+        - lower_right_bot_3
+      child: lower_left_bot_3
