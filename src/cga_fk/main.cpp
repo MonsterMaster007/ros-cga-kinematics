@@ -4,8 +4,10 @@
 #include <geometry_msgs/Vector3.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <urdf/model.h>
+#include <kdl_parser/kdl_parser.hpp>
 
 #include <algorithm>
+#include <stack>
 
 #include "cga.h"
 
@@ -28,50 +30,9 @@ const geometry_msgs::Vector3 down(const CGA &mvec)
 
 } // namespace cga
 
-enum class DeltaJoint {
-    BASE_TO_UPPER_1,
-    BASE_TO_UPPER_2,
-    BASE_TO_UPPER_3,
-    UPPER_TO_ELBOW_1,
-    UPPER_TO_ELBOW_2,
-    UPPER_TO_ELBOW_3,
-    ELBOW_TO_LOWER_LEFT_1,
-    ELBOW_TO_LOWER_RIGHT_1,
-    ELBOW_TO_LOWER_LEFT_2,
-    ELBOW_TO_LOWER_RIGHT_2,
-    ELBOW_TO_LOWER_LEFT_3,
-    ELBOW_TO_LOWER_RIGHT_3,
-    LOWER_LEFT_TO_BOT_1,
-    LOWER_LEFT_TO_BOT_2,
-    LOWER_LEFT_TO_BOT_3,
-    LOWER_BOT_TO_END_EFFECTOR_1,
-    LOWER_BOT_TO_END_EFFECTOR_2,
-    LOWER_BOT_TO_END_EFFECTOR_3
-};
-
-const std::vector<std::string> delta_joint_names = {
-    "base_to_upper_1",
-    "base_to_upper_2",
-    "base_to_upper_3",
-    "upper_to_elbow_1",
-    "upper_to_elbow_2",
-    "upper_to_elbow_3",
-    "elbow_to_lower_left_1",
-    "elbow_to_lower_right_1",
-    "elbow_to_lower_left_2",
-    "elbow_to_lower_right_2",
-    "elbow_to_lower_left_3",
-    "elbow_to_lower_right_3",
-    "lower_left_to_lower_bot_1",
-    "lower_left_to_lower_bot_2",
-    "lower_left_to_lower_bot_3",
-    "lower_bot_to_end_effector_1",
-    "lower_bot_to_end_effector_2",
-    "lower_bot_to_end_effector_3"
-};
-
 void apply_simple_contraints(sensor_msgs::JointState &joint_state)
 {
+    /*
     joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_RIGHT_1]
         = joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_1];
 
@@ -101,20 +62,20 @@ void apply_simple_contraints(sensor_msgs::JointState &joint_state)
     joint_state.position[(std::size_t)DeltaJoint::LOWER_BOT_TO_END_EFFECTOR_3]
         = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_3]
         + joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_3];
+    */
 }
 
 void compute_fk(
-    sensor_msgs::JointState &joint_state,
-    geometry_msgs::Vector3 &pos)
-
+    const KDL::Tree &tree,
+    std::map<std::string, double> joint_values)
 {
     std::vector<double> theta;
     std::vector<double> alpha;
     std::vector<double> beta;
 
-    theta[0] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
-    theta[1] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
-    theta[2] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
+    // theta[0] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
+    // theta[1] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
+    // theta[2] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
 
     // Calculate pos
 
@@ -152,129 +113,93 @@ void compute_fk(
     z = [down(Zi) for Zi in Z]
     */
 
-    pos.x = 0;
-    pos.y = 0;
-    pos.z = -0.6;
-
     // Calculate angles
 
     // Put angles in joint_state message
 
-    joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_1] = alpha[0];
-    joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_2] = alpha[1];
-    joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_3] = alpha[2];
+    // joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_1] = alpha[0];
+    // joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_2] = alpha[1];
+    // joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_3] = alpha[2];
 
-    joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_1] = beta[0];
-    joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_2] = beta[1];
-    joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_3] = beta[2];
+    // joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_1] = beta[0];
+    // joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_2] = beta[1];
+    // joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_3] = beta[2];
 }
-
-struct Loop {
-    std::vector<std::string> parents;
-    std::string child;
-    std::vector<std::string> dependent_joints;
-    std::vector<std::string> independent_joint;
-};
 
 class Node {
 public:
     Node(ros::NodeHandle &n)
     {
-        joint_states_in_sub = n.subscribe(
+        joint_states_sub = n.subscribe(
             "joint_states_in",
             1,
             &Node::joint_states_callback,
             this
         );
-        joint_states_out_pub = n.advertise<sensor_msgs::JointState>(
-            "joint_states_out",
-            100
-        );
-        msg_out.name = delta_joint_names;
-        msg_out.position.resize(msg_out.name.size());
-
-        end_effector_transform.header.frame_id = "base";
-        end_effector_transform.child_frame_id = "end_effector";
-        end_effector_transform.transform.rotation.w = 1;
 
         // Parse urdf
-        urdf::Model model;
         if (!model.initParam("robot_description")) {
             ROS_ERROR("Failed to parse urdf file");
         }
 
-        // Extract loops parameter
-        XmlRpc::XmlRpcValue loops;
-        if (n.getParam("loops", loops)) {
-            assert(loops.getType() == XmlRpc::XmlRpcValue::TypeArray);
-            for (std::size_t i = 0; i < loops.size(); i++) {
-                ROS_INFO("Loop %lu", i);
-                XmlRpc::XmlRpcValue &parents = loops[i]["parents"];
-                assert(parents.getType() == XmlRpc::XmlRpcValue::TypeArray);
-                for (std::size_t j = 0; j < parents.size(); j++) {
-                    std::string parent_name(parents[j]);
-                    ROS_INFO("Parent %lu: %s", j, parent_name.c_str());
-                }
-                XmlRpc::XmlRpcValue &child = loops[i]["child"];
-                std::string child_name(child);
-                ROS_INFO("Child: %s", child_name.c_str());
-            }
-        } else {
-            ROS_INFO("Failed to read loops parameter");
+        // Create KDL tree from URDF.
+        // In future, create CGA kinematic tree from urdf
+        if (!kdl_parser::treeFromUrdfModel(model, tree)) {
+            ROS_ERROR("Failed to construct kdl tree");
         }
-
-        // TODO: Use the "loops" parameter to get a list of loops which
-        // need closing.
     }
 
-    void joint_states_callback(sensor_msgs::JointState msg_in)
+    void joint_states_callback(sensor_msgs::JointState joint_state)
     {
-        // Copy the joint positions from msg_in to msg_out
-        auto name_in_it = msg_in.name.cbegin();
-        auto pos_in_it = msg_in.position.cbegin();
-        while (name_in_it != msg_in.name.cend()) {
-            auto name_out_it = msg_out.name.begin();
-            auto pos_out_it = msg_out.position.begin();
-            while (name_out_it != msg_out.name.end()) {
-                if (*name_in_it == *name_out_it) {
-                    *pos_out_it = *pos_in_it;
-                    break;
-                }
-                name_out_it++;
-                pos_out_it++;
-            }
-            name_in_it++;
-            pos_in_it++;
+        std::map<std::string, double> joint_values;
+
+        // Copy independent joint values to map
+        for (std::size_t i = 0; i < joint_state.name.size(); i++) {
+            joint_values[joint_state.name[i]] = joint_state.position[i];
         }
 
-        // Compute the forward kinematics, which requires finding
-        // the correct joint angles to joint the 3 kinematic chains
-        // Additionally, provide a vector for the end effector position
-        geometry_msgs::Vector3 end_effector_pos;
-        compute_fk(msg_out, end_effector_pos);
+        // Complete remaining joint values by satisfying constraints
+        compute_fk(tree, joint_values);
 
-        // The remaining joints are constrained in simple ways
-        apply_simple_contraints(msg_out);
+        // Traverse tree and publish relative transforms
 
-        msg_out.header.stamp = ros::Time::now();
-        joint_states_out_pub.publish(msg_out);
+        tf_msg.header.stamp = ros::Time::now();
+        std::stack<KDL::SegmentMap::const_iterator> segments;
+        segments.push(tree.getRootSegment());
+        KDL::SegmentMap::const_iterator it;
 
-        end_effector_transform.transform.translation.x = end_effector_pos.x;
-        end_effector_transform.transform.translation.y = end_effector_pos.y;
-        end_effector_transform.transform.translation.z = end_effector_pos.z;
-        end_effector_transform.header.stamp = ros::Time::now();
-        tf_broadcaster.sendTransform(end_effector_transform);
+        while (!segments.empty()) {
+            it = segments.top();
+            segments.pop();
+
+            tf_msg.header.frame_id = it->first;
+            for (std::size_t child_i = 0; child_i < it->second.children.size(); child_i++) {
+                tf_msg.child_frame_id = it->second.children[child_i]->first;
+                std::string joint_name = it->second.children[child_i]->second.segment.getJoint().getName();
+                KDL::Frame pose = it->second.children[child_i]->second.segment.pose(joint_values[joint_name]);
+                tf_msg.transform.translation.x = pose.p.x();
+                tf_msg.transform.translation.y = pose.p.y();
+                tf_msg.transform.translation.z = pose.p.z();
+                pose.M.GetQuaternion(
+                    tf_msg.transform.rotation.x,
+                    tf_msg.transform.rotation.y,
+                    tf_msg.transform.rotation.z,
+                    tf_msg.transform.rotation.w
+                );
+                tf_broadcaster.sendTransform(tf_msg);
+
+                segments.push(it->second.children[child_i]);
+            }
+        }
     }
 
 private:
-    ros::Subscriber joint_states_in_sub;
-    ros::Publisher joint_states_out_pub;
-    sensor_msgs::JointState msg_out;
-
+    ros::Subscriber joint_states_sub;
     tf2_ros::TransformBroadcaster tf_broadcaster;
-    geometry_msgs::TransformStamped end_effector_transform;
+    geometry_msgs::TransformStamped tf_msg;
 
-    std::vector<Loop> loops;
+    urdf::Model model;
+    KDL::Tree tree;
 };
 
 int main(int argc, char **argv)
