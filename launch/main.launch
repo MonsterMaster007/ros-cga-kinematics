@@ -7,10 +7,10 @@
     <!-- Simply here to make certain joints get ignored by
     joint_state_publisher_gui. Can be used to setup dependent joints, but
     we are doing this manually, so ignore it here -->
-    <!--<rosparam
+    <rosparam
         file="$(find cga_kinematics)/config/dependent_joints.yaml"
         command="load"
-    />-->
+    />
 
     <!-- Start joint_state_publisher_gui to create a gui for controlling
     joint angles -->

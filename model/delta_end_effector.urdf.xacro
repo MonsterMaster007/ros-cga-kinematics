@@ -20,16 +20,6 @@
 </joint>
 
 <link name="virtual_end_effector_offset">
-    <visual>
-        <geometry>
-            <cylinder
-                length="${end_effector_radius}"
-                radius="${end_effector_depth}"
-            />
-        </geometry>
-        <origin rpy="0 ${pi/2} 0" xyz="${end_effector_radius/2} 0 0"/>
-        <material name="virtual_link"/>
-    </visual>
 </link>
 
 <joint name="virtual_end_effector_offset_to_end_effector" type="fixed">

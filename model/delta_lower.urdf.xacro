@@ -194,7 +194,7 @@
 
 <xacro:macro name="joint_lower_left_to_lower_bot" params="number">
 <joint name="lower_left_to_lower_bot_${number}" type="revolute">
-    <axis xyz="0 0 1"/>
+    <axis xyz="0 0 -1"/>
     <limit
         effort="1000.0"
         lower="${-pi/2}"

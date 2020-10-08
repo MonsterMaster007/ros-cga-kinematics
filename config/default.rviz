@@ -134,6 +134,33 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        pseudo_elbow_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        pseudo_elbow_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        pseudo_elbow_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        pseudo_elbow_offset_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pseudo_elbow_offset_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pseudo_elbow_offset_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         upper_1:
           Alpha: 1
           Show Axes: false
@@ -149,11 +176,25 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        virtual_end_effector_offset:
+        virtual_end_effector_1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        virtual_end_effector_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_end_effector_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_end_effector_offset:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         virtual_lower_1:
           Alpha: 1
           Show Axes: false
@@ -165,21 +206,6 @@ Visualization Manager:
           Show Trail: false
           Value: true
         virtual_lower_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_lower_offset_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_lower_offset_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_lower_offset_3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -191,99 +217,19 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        base:
-          Value: true
-        end_effector:
-          Value: true
-        lower_bot_1:
-          Value: true
-        lower_bot_2:
-          Value: true
-        lower_bot_3:
-          Value: true
-        lower_left_1:
-          Value: true
-        lower_left_2:
-          Value: true
-        lower_left_3:
-          Value: true
-        lower_right_1:
-          Value: true
-        lower_right_2:
-          Value: true
-        lower_right_3:
-          Value: true
-        lower_top_1:
-          Value: true
-        lower_top_2:
-          Value: true
-        lower_top_3:
-          Value: true
-        upper_1:
-          Value: true
-        upper_2:
-          Value: true
-        upper_3:
-          Value: true
-        virtual_end_effector_offset:
-          Value: true
-        virtual_lower_1:
-          Value: true
-        virtual_lower_2:
-          Value: true
-        virtual_lower_3:
-          Value: true
-        virtual_lower_offset_1:
-          Value: true
-        virtual_lower_offset_2:
-          Value: true
-        virtual_lower_offset_3:
-          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        base:
-          upper_1:
-            lower_top_1:
-              lower_left_1:
-                lower_bot_1:
-                  virtual_end_effector_offset:
-                    end_effector:
-                      {}
-              lower_right_1:
-                {}
-            virtual_lower_offset_1:
-              virtual_lower_1:
-                {}
-          upper_2:
-            lower_top_2:
-              lower_left_2:
-                lower_bot_2:
-                  {}
-              lower_right_2:
-                {}
-            virtual_lower_offset_2:
-              virtual_lower_2:
-                {}
-          upper_3:
-            lower_top_3:
-              lower_left_3:
-                lower_bot_3:
-                  {}
-              lower_right_3:
-                {}
-            virtual_lower_offset_3:
-              virtual_lower_3:
-                {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -327,10 +273,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5602030158042908
+      Pitch: 0.060203101485967636
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.3803997039794922
+      Yaw: 1.090399980545044
     Saved: ~
 Window Geometry:
   Displays:

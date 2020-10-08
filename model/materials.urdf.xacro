@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_materials">
 
 <material name="break_indicator">
-    <color rgba="0 0 0 1"/>
+    <color rgba="1 0 0 1"/>
 </material>
 
 <material name="physical_link">

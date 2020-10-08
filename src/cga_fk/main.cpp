@@ -30,44 +30,9 @@ const geometry_msgs::Vector3 down(const CGA &mvec)
 
 } // namespace cga
 
-void apply_simple_contraints(sensor_msgs::JointState &joint_state)
-{
-    /*
-    joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_RIGHT_1]
-        = joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_1];
-
-    joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_RIGHT_2]
-        = joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_2];
-
-    joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_RIGHT_3]
-        = joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_3];
-
-    joint_state.position[(std::size_t)DeltaJoint::LOWER_LEFT_TO_BOT_1]
-        = - joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_1];
-
-    joint_state.position[(std::size_t)DeltaJoint::LOWER_LEFT_TO_BOT_2]
-        = - joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_2];
-
-    joint_state.position[(std::size_t)DeltaJoint::LOWER_LEFT_TO_BOT_3]
-        = - joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_3];
-
-    joint_state.position[(std::size_t)DeltaJoint::LOWER_BOT_TO_END_EFFECTOR_1]
-        = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1]
-        + joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_1];
-
-    joint_state.position[(std::size_t)DeltaJoint::LOWER_BOT_TO_END_EFFECTOR_2]
-        = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_2]
-        + joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_2];
-
-    joint_state.position[(std::size_t)DeltaJoint::LOWER_BOT_TO_END_EFFECTOR_3]
-        = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_3]
-        + joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_3];
-    */
-}
-
 void compute_fk(
     const KDL::Tree &tree,
-    std::map<std::string, double> joint_values)
+    std::map<std::string, double> &joint_values)
 {
     std::vector<double> theta(3);
     std::vector<double> alpha(3);
@@ -76,6 +41,7 @@ void compute_fk(
     theta[0] = joint_values["base_to_upper_1"];
     theta[1] = joint_values["base_to_upper_2"];
     theta[2] = joint_values["base_to_upper_3"];
+
 
     // Calculate the necessary alpha_i and beta_i
 
@@ -113,15 +79,45 @@ void compute_fk(
 
     // Calculate angles
 
+    alpha[0] = 1.2;
+    alpha[1] = 1.4;
+    alpha[2] = 1.3;
+
+    beta[0] = 0.2;
+    beta[1] = -0.3;
+    beta[2] = 0.5;
+
     // Put angles in joint_state message
 
-    // joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_1] = alpha[0];
-    // joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_2] = alpha[1];
-    // joint_state.position[(std::size_t)DeltaJoint::UPPER_TO_ELBOW_3] = alpha[2];
+    joint_values["upper_to_lower_top_1"] = theta[0] + alpha[0];
+    joint_values["upper_to_lower_top_2"] = theta[1] + alpha[1];
+    joint_values["upper_to_lower_top_3"] = theta[2] + alpha[2];
 
-    // joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_1] = beta[0];
-    // joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_2] = beta[1];
-    // joint_state.position[(std::size_t)DeltaJoint::ELBOW_TO_LOWER_LEFT_3] = beta[2];
+    joint_values["upper_to_pseudo_elbow_offset_1"] = theta[0];
+    joint_values["upper_to_pseudo_elbow_offset_2"] = theta[1];
+    joint_values["upper_to_pseudo_elbow_offset_3"] = theta[2];
+
+    joint_values["pseudo_elbow_offset_to_pseudo_elbow_1"] = alpha[0];
+    joint_values["pseudo_elbow_offset_to_pseudo_elbow_2"] = alpha[1];
+    joint_values["pseudo_elbow_offset_to_pseudo_elbow_3"] = alpha[2];
+
+    joint_values["pseudo_elbow_to_virtual_lower_1"] = beta[0];
+    joint_values["pseudo_elbow_to_virtual_lower_2"] = beta[1];
+    joint_values["pseudo_elbow_to_virtual_lower_3"] = beta[2];
+
+    joint_values["lower_top_to_lower_left_1"] = beta[0];
+    joint_values["lower_top_to_lower_left_2"] = beta[1];
+    joint_values["lower_top_to_lower_left_3"] = beta[2];
+
+    joint_values["lower_top_to_lower_right_1"] = beta[0];
+    joint_values["lower_top_to_lower_right_2"] = beta[1];
+    joint_values["lower_top_to_lower_right_3"] = beta[2];
+
+    joint_values["lower_left_to_lower_bot_1"] = beta[0];
+    joint_values["lower_left_to_lower_bot_2"] = beta[1];
+    joint_values["lower_left_to_lower_bot_3"] = beta[2];
+
+    joint_values["lower_bot_1_to_virtual_end_effector_offset"] = alpha[0];
 }
 
 class Node {
@@ -150,7 +146,6 @@ public:
             for (std::size_t joint_i = 0; joint_i < it->child_joints.size(); joint_i++) {
                 joint_values[it->child_joints[joint_i]->name] = 0;
                 links.push(it->child_links[joint_i]);
-                ROS_INFO("%s\n", it->child_joints[joint_i]->name.c_str());
             }
         }
 
@@ -197,7 +192,6 @@ public:
                     tf_msg.transform.rotation.w
                 );
                 tf_broadcaster.sendTransform(tf_msg);
-
                 segments.push(it->second.children[child_i]);
             }
         }
