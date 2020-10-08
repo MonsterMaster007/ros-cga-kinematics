@@ -69,21 +69,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        elbow_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        elbow_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        elbow_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         end_effector:
           Alpha: 1
           Show Axes: false
@@ -134,6 +119,21 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        lower_top_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lower_top_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lower_top_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         upper_1:
           Alpha: 1
           Show Axes: false
@@ -149,29 +149,37 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        virtual_end_effector_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        virtual_end_effector_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        virtual_end_effector_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        virtual_end_effector_break_1:
+        virtual_end_effector_offset:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        virtual_end_effector_break_2:
+        virtual_lower_1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        virtual_end_effector_break_3:
+        virtual_lower_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_lower_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_lower_offset_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_lower_offset_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_lower_offset_3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -189,12 +197,6 @@ Visualization Manager:
         All Enabled: true
         base:
           Value: true
-        elbow_1:
-          Value: true
-        elbow_2:
-          Value: true
-        elbow_3:
-          Value: true
         end_effector:
           Value: true
         lower_bot_1:
@@ -215,23 +217,31 @@ Visualization Manager:
           Value: true
         lower_right_3:
           Value: true
+        lower_top_1:
+          Value: true
+        lower_top_2:
+          Value: true
+        lower_top_3:
+          Value: true
         upper_1:
           Value: true
         upper_2:
           Value: true
         upper_3:
           Value: true
-        virtual_end_effector_1:
+        virtual_end_effector_offset:
           Value: true
-        virtual_end_effector_2:
+        virtual_lower_1:
           Value: true
-        virtual_end_effector_3:
+        virtual_lower_2:
           Value: true
-        virtual_end_effector_break_1:
+        virtual_lower_3:
           Value: true
-        virtual_end_effector_break_2:
+        virtual_lower_offset_1:
           Value: true
-        virtual_end_effector_break_3:
+        virtual_lower_offset_2:
+          Value: true
+        virtual_lower_offset_3:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -241,32 +251,36 @@ Visualization Manager:
       Tree:
         base:
           upper_1:
-            elbow_1:
+            lower_top_1:
               lower_left_1:
                 lower_bot_1:
-                  virtual_end_effector_1:
-                    virtual_end_effector_break_1:
-                      end_effector:
-                        {}
+                  virtual_end_effector_offset:
+                    end_effector:
+                      {}
               lower_right_1:
                 {}
+            virtual_lower_offset_1:
+              virtual_lower_1:
+                {}
           upper_2:
-            elbow_2:
+            lower_top_2:
               lower_left_2:
                 lower_bot_2:
-                  virtual_end_effector_2:
-                    virtual_end_effector_break_2:
-                      {}
+                  {}
               lower_right_2:
                 {}
+            virtual_lower_offset_2:
+              virtual_lower_2:
+                {}
           upper_3:
-            elbow_3:
+            lower_top_3:
               lower_left_3:
                 lower_bot_3:
-                  virtual_end_effector_3:
-                    virtual_end_effector_break_3:
-                      {}
+                  {}
               lower_right_3:
+                {}
+            virtual_lower_offset_3:
+              virtual_lower_3:
                 {}
       Update Interval: 0
       Value: true
@@ -298,25 +312,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.602891683578491
+      Distance: 2.8318843841552734
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.16482190787792206
-        Y: 0.03312402963638306
-        Z: -0.1450333595275879
+        X: 0.012451852671802044
+        Y: -0.05366440489888191
+        Z: -0.14512242376804352
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5102024078369141
+      Pitch: 0.5602030158042908
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.860396385192871
+      Yaw: 1.3803997039794922
     Saved: ~
 Window Geometry:
   Displays:

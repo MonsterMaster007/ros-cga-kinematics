@@ -1,27 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
 
-
-<!-- ===== VIRTUAL END EFFECTORS ===== -->
-
-<!--
-<xacro:macro name="link_virtual_end_effector" params="number">
-<link name="virtual_end_effector_${number}">
-    <visual>
-        <geometry>
-            <sphere radius="break_indicator_radius"/>
-        </geometry>
-        <material name="break_indicator"/>
-    </visual>
-</link>
-</xacro:macro>
-
-<xacro:link_virtual_end_effector number="1"/>
-<xacro:link_virtual_end_effector number="2"/>
-<xacro:link_virtual_end_effector number="3"/>
--->
-
-<!-- ===== ACTUAL END EFFECTOR ===== -->
+<!-- ===== END EFFECTOR ===== -->
 
 <joint name="lower_bot_1_to_virtual_end_effector_offset" type="revolute">
     <axis xyz="0 -1 0"/>
