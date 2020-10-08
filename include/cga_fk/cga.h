@@ -716,12 +716,14 @@ static CGA e1(1.0f,1), e2(1.0f,2), e3(1.0f,3), e4(1.0f,4), e5(1.0f,5);
 
 // We seldomly work in the natural basis, but instead in a null basis
 // for this we create two null vectors 'origin' and 'infinity'
-static CGA eo = e4+e5, ei = 0.5f*(e5-e4);
+static CGA ninf = e4+e5, n0 = 0.5f*(e5-e4);
 
 // create a point from x,y,z coordinates
 static CGA up(float x, float y, float z) {
   float d = x*x + y*y + z*z;
-  return x*e1 + y*e2 + z*e3 + 0.5f*d*ei + eo;
+  return x*e1 + y*e2 + z*e3 + 0.5f*d*ninf + n0;
 }
+
+static CGA I5(1.0f, E12345);
 
 } // namespace cga

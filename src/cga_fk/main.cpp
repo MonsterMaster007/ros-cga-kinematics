@@ -5,6 +5,7 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <urdf/model.h>
 #include <kdl_parser/kdl_parser.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
 
 #include <algorithm>
 #include <stack>
@@ -13,19 +14,19 @@
 
 namespace cga {
 
-CGA up(const geometry_msgs::Vector3 &vector)
+CGA up(const KDL::Vector &vector)
 {
-    return up(vector.x, vector.y, vector.z);
+    return up(vector.x(), vector.y(), vector.z());
 }
 
-const geometry_msgs::Vector3 down(const CGA &mvec)
+const KDL::Vector down(const CGA &mvec)
 {
-    geometry_msgs::Vector3 result;
-    float normalisation = -(mvec|cga::ei)[cga::SCALAR];
-    result.x = mvec[E1] / normalisation;
-    result.y = mvec[E2] / normalisation;
-    result.z = mvec[E3] / normalisation;
-    return result;
+    float normalisation = -(mvec|cga::ninf)[cga::SCALAR];
+    return KDL::Vector(
+        mvec[E1] / normalisation,
+        mvec[E2] / normalisation,
+        mvec[E3] / normalisation
+    );
 }
 
 } // namespace cga
@@ -42,50 +43,74 @@ void compute_fk(
     theta[1] = joint_values["base_to_upper_2"];
     theta[2] = joint_values["base_to_upper_3"];
 
-
     // Calculate the necessary alpha_i and beta_i
 
-    // ...
-    /*
-    def get_si(i):
-        return np.cos(i*np.pi*2/3)*e1 + np.sin(i*np.pi*2/3)*e2
+    // Get s(i) and a(i)
+    std::vector<KDL::Vector> s(3);
+    std::vector<KDL::Vector> a(3);
+    std::vector<cga::CGA> A(3);
 
-    def get_w(i, theta_i):
-        return (rb + l*np.cos(theta_i))*get_si(i) + l*np.sin(theta_i)*e3
+    KDL::Chain a_chain;
+    KDL::JntArray a_joints = KDL::JntArray(3);
+    KDL::Frame a_frame;
 
-    def get_a(i, theta_i):
-        return get_w(i, theta_i) - re*get_si(i)
+    static const std::string pseudo_elbow_names[] = {
+        "pseudo_elbow_1", "pseudo_elbow_2", "pseudo_elbow_3"
+    };
+    static const std::string upper_names[] = {
+        "upper_1", "upper_2", "upper_3"
+    };
 
-    # Arbitrary angles
+    for (std::size_t i = 0; i < 3; i++) {
+        tree.getChain("base", pseudo_elbow_names[i], a_chain);
+        KDL::ChainFkSolverPos_recursive fk_solver(a_chain);
+        a_joints(0) = theta[i];
+        a_joints(1) = theta[i];
+        a_joints(2) = 0;
+        fk_solver.JntToCart(a_joints, a_frame);
+        a[i] = a_frame.p;
+        A[i] = cga::up(a[i]);
 
-    theta = [np.pi*0.3, np.pi*0.2, np.pi*0.5]
+        s[i] = tree.getSegment(upper_names[i])->second.segment.pose(0).p;
+        s[i].Normalize();
+    }
 
-    # Calculate joint positions
+    static const std::string virtual_end_effector_names[] = {
+        "virtual_end_effector_1", "virtual_end_effector_2", "virtual_end_effector_3"
+    };
 
-    W = [up(get_w(i, theta[i])) for i in range(3)]
-    A = [up(get_a(i, theta[i])) for i in range(3)]
-    PiA = [Ai - 0.5*rho**2*einf for Ai in A]
+    std::vector<cga::CGA> PiA(3);
+    for (std::size_t i = 0; i < 3; i++) {
+        float rho = tree.getSegment(virtual_end_effector_names[i])->second.segment.pose(0).p.Norm();
+        PiA[i] = A[i] - 0.5*pow(rho, 2)*cga::ninf;
+    }
 
-    T = I5*(PiA[0]^PiA[1]^PiA[2])
-    P = 1 + T.normal()
-    Y = -~P * (T|ninf) * P
-    Ys = [float(Y|ei)*ei for ei in [e1, e2, e3, einf, eo]]
-    Y = Ys[0] + Ys[1] + Ys[2] + Ys[3] + Ys[4]
-    y = down(Y)
 
-    Z = [up(y + re*get_si(i)) for i in range(3)]
-    z = [down(Zi) for Zi in Z]
-    */
+    cga::CGA(1, cga::E12345);
 
-    // Calculate angles
+    cga::CGA T, P, Y;
+    T = cga::I5*(PiA[0]^PiA[1]^PiA[2]);
+    P = cga::CGA(1.0f, cga::SCALAR) + T.normalized();
+    Y = -1 * (~P * (T|cga::ninf) * P);
 
-    alpha[0] = 1.2;
-    alpha[1] = 1.4;
-    alpha[2] = 1.3;
+    KDL::Vector y = down(Y);
 
-    beta[0] = 0.2;
-    beta[1] = -0.3;
-    beta[2] = 0.5;
+    std::vector<KDL::Vector> lower_disp(3);
+    for (std::size_t i = 0; i < 3; i++) {
+        lower_disp[i] = y - a[i];
+
+        alpha[i] = atan2(
+            lower_disp[i].z(),
+            lower_disp[i].x()*s[i].x()
+            + lower_disp[i].y()*s[i].y()
+        );
+
+        beta[i] = atan2(
+            - lower_disp[i].y()*s[i].x()
+            + lower_disp[i].x()*s[i].y(),
+            lower_disp[i].z()
+        );
+    }
 
     // Put angles in joint_state message
 
