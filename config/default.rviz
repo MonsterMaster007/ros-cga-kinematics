@@ -54,7 +54,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 0.4000000059604645
+    - Alpha: 0.800000011920929
       Class: rviz/RobotModel
       Collision Enabled: false
       Enabled: true
@@ -84,17 +84,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        end_effector_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        end_effector_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        end_effector_3:
+        end_effector:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -155,6 +145,33 @@ Visualization Manager:
           Show Trail: false
           Value: true
         upper_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_end_effector_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        virtual_end_effector_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        virtual_end_effector_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        virtual_end_effector_break_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_end_effector_break_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_end_effector_break_3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -178,11 +195,7 @@ Visualization Manager:
           Value: true
         elbow_3:
           Value: true
-        end_effector_1:
-          Value: true
-        end_effector_2:
-          Value: true
-        end_effector_3:
+        end_effector:
           Value: true
         lower_bot_1:
           Value: true
@@ -208,6 +221,18 @@ Visualization Manager:
           Value: true
         upper_3:
           Value: true
+        virtual_end_effector_1:
+          Value: true
+        virtual_end_effector_2:
+          Value: true
+        virtual_end_effector_3:
+          Value: true
+        virtual_end_effector_break_1:
+          Value: true
+        virtual_end_effector_break_2:
+          Value: true
+        virtual_end_effector_break_3:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
@@ -219,24 +244,28 @@ Visualization Manager:
             elbow_1:
               lower_left_1:
                 lower_bot_1:
-                  end_effector_1:
-                    {}
+                  virtual_end_effector_1:
+                    virtual_end_effector_break_1:
+                      end_effector:
+                        {}
               lower_right_1:
                 {}
           upper_2:
             elbow_2:
               lower_left_2:
                 lower_bot_2:
-                  end_effector_2:
-                    {}
+                  virtual_end_effector_2:
+                    virtual_end_effector_break_2:
+                      {}
               lower_right_2:
                 {}
           upper_3:
             elbow_3:
               lower_left_3:
                 lower_bot_3:
-                  end_effector_3:
-                    {}
+                  virtual_end_effector_3:
+                    virtual_end_effector_break_3:
+                      {}
               lower_right_3:
                 {}
       Update Interval: 0
@@ -284,10 +313,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5002023577690125
+      Pitch: 0.5102024078369141
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.5803962349891663
+      Yaw: 1.860396385192871
     Saved: ~
 Window Geometry:
   Displays:

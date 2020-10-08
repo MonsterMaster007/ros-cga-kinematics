@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_parameters">
+
+<!-- gives inertia of AAC cylinder. Provide rpy to rotate the inertial frame
+such that Z is aligned with the axis of the cylinder-->
+<xacro:macro name="cylinder_inertial" params="mass radius length rpy">
+<inertial>
+    <origin rpy="${rpy}" xyz="0 0 0"/>
+    <mass value="${mass}"/>
+    <inertia
+        ixx="${mass*(radius**2/4 + length**2/12)}"
+        iyy="${mass*(radius**2/4 + length**2/12)}"
+        izz="${mass*(radius**2/2)}"
+        ixy="0" ixz="0" iyz="0"
+    />
+</inertial>
+</xacro:macro>
+
+</robot>

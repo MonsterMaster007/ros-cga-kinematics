@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_parameters">
+
+
+<!-- ===== JOINTS ===== -->
+
+<xacro:macro name="joint_base_to_upper" params="number yaw">
+<joint name="base_to_upper_${number}" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit
+        effort="1000.0"
+        lower="${joint_lower_limit}"
+        upper="${joint_upper_limit}"
+        velocity="0.5"
+    />
+    <origin
+        rpy="0 0 ${yaw}"
+        xyz="${cos(yaw)*base_radius} ${sin(yaw)*base_radius} 0"
+    />
+    <parent link="base"/>
+    <child link="upper_${number}"/>
+</joint>
+</xacro:macro>
+
+<xacro:joint_base_to_upper number="1" yaw="0"/>
+<xacro:joint_base_to_upper number="2" yaw="${pi*2/3}"/>
+<xacro:joint_base_to_upper number="3" yaw="${-pi*2/3}"/>
+
+
+<!-- ===== LINKS ===== -->
+
+<xacro:macro name="link_upper" params="number">
+<link name="upper_${number}">
+<xacro:cylinder_inertial
+    mass="${upper_mass}"
+    radius="${upper_radius}"
+    length="${upper_length}"
+    rpy="0 ${pi/2} 0"
+/>
+<visual>
+    <geometry>
+        <cylinder
+            length="${upper_length}"
+            radius="${upper_radius}"
+        />
+    </geometry>
+    <origin
+        xyz="${upper_length/2} 0 0"
+        rpy="0 ${pi/2} 0"
+    />
+    <material name="physical_link"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${upper_length}"
+            radius="${upper_radius}"
+        />
+    </geometry>
+    <origin
+        xyz="${upper_length/2} 0 0"
+        rpy="0 ${pi/2} 0"
+    />
+</collision>
+</link>
+</xacro:macro>
+
+<xacro:link_upper number="1"/>
+<xacro:link_upper number="2"/>
+<xacro:link_upper number="3"/>
+
+</robot>

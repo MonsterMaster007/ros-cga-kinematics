@@ -1,0 +1,281 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
+
+<!-- ===== LOWER TOP ===== -->
+
+<xacro:macro name="joint_upper_to_lower_top" params="number">
+<joint name="upper_to_lower_top_${number}" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit
+        effort="1000.0"
+        lower="${-pi/2}"
+        upper="${pi/2}"
+        velocity="0.5"
+    />
+    <origin
+        rpy="0 0 0"
+        xyz="${upper_length} 0 0"
+    />
+    <parent link="upper_${number}"/>
+    <child link="lower_top_${number}"/>
+</joint>
+</xacro:macro>
+
+<xacro:joint_upper_to_lower_top number="1"/>
+<xacro:joint_upper_to_lower_top number="2"/>
+<xacro:joint_upper_to_lower_top number="3"/>
+
+<xacro:macro name="link_lower_top" params="number">
+<link name="lower_top_${number}">
+<xacro:cylinder_inertial
+    mass="${lower_horizontal_mass}"
+    radius="${lower_radius}"
+    length="${lower_horizontal_length}"
+    rpy="0 ${pi/2} ${pi/2}"
+/>
+<visual>
+    <geometry>
+        <cylinder length="${lower_horizontal_length}" radius="${lower_radius}"/>
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} ${pi/2}"
+        xyz="0 0 0"
+    />
+    <material name="physical_link"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder length="${lower_horizontal_length}" radius="${lower_radius}"/>
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} ${pi/2}"
+        xyz="0 0 0"
+    />
+</collision>
+</link>
+</xacro:macro>
+
+<xacro:link_lower_top number="1"/>
+<xacro:link_lower_top number="2"/>
+<xacro:link_lower_top number="3"/>
+
+
+<!-- ===== LOWER LEFT ===== -->
+
+<xacro:macro name="joint_lower_top_to_lower_left" params="number">
+<joint name="lower_top_to_lower_left_${number}" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit
+        effort="1000.0"
+        lower="${-pi/2}"
+        upper="${pi/2}"
+        velocity="0.5"
+    />
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="0 ${lower_horizontal_length/2} 0"
+    />
+    <parent link="lower_top_${number}"/>
+    <child link="lower_left_${number}"/>
+</joint>
+</xacro:macro>
+
+<xacro:joint_lower_top_to_lower_left number="1"/>
+<xacro:joint_lower_top_to_lower_left number="2"/>
+<xacro:joint_lower_top_to_lower_left number="3"/>
+
+<xacro:macro name="link_lower_left" params="number">
+<link name="lower_left_${number}">
+<xacro:cylinder_inertial
+    mass="${lower_vertical_mass}"
+    radius="${lower_radius}"
+    length="${lower_vertical_length}"
+    rpy="0 ${pi/2} 0"
+/>
+<visual>
+    <geometry>
+        <cylinder
+            length="${lower_vertical_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_vertical_length/2} 0 0"
+    />
+    <material name="physical_link"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${lower_vertical_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_vertical_length/2} 0 0"
+    />
+</collision>
+</link>
+</xacro:macro>
+
+<xacro:link_lower_left number="1"/>
+<xacro:link_lower_left number="2"/>
+<xacro:link_lower_left number="3"/>
+
+
+<!-- ===== LOWER RIGHT ===== -->
+
+<xacro:macro name="joint_lower_top_to_lower_right" params="number">
+<joint name="lower_top_to_lower_right_${number}" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit
+        effort="1000.0"
+        lower="${-pi/2}"
+        upper="${pi/2}"
+        velocity="0.5"
+    />
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="0 ${-lower_horizontal_length/2} 0"
+    />
+    <parent link="lower_top_${number}"/>
+    <child link="lower_right_${number}"/>
+</joint>
+</xacro:macro>
+
+<xacro:joint_lower_top_to_lower_right number="1"/>
+<xacro:joint_lower_top_to_lower_right number="2"/>
+<xacro:joint_lower_top_to_lower_right number="3"/>
+
+<xacro:macro name="link_lower_right" params="number">
+<link name="lower_right_${number}">
+<xacro:cylinder_inertial
+    mass="${lower_vertical_mass}"
+    radius="${lower_radius}"
+    length="${lower_vertical_length}"
+    rpy="0 ${pi/2} 0"
+/>
+<visual>
+    <geometry>
+        <cylinder
+            length="${lower_vertical_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_vertical_length/2} 0 0"
+    />
+    <material name="physical_link"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${lower_vertical_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_vertical_length/2} 0 0"
+    />
+</collision>
+</link>
+</xacro:macro>
+
+<xacro:link_lower_right number="1"/>
+<xacro:link_lower_right number="2"/>
+<xacro:link_lower_right number="3"/>
+
+
+<!-- ===== LOWER BOT ===== -->
+
+<xacro:macro name="joint_lower_left_to_lower_bot" params="number">
+<joint name="lower_left_to_lower_bot_${number}" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit
+        effort="1000.0"
+        lower="${-pi/2}"
+        upper="${pi/2}"
+        velocity="0.5"
+    />
+    <origin
+        rpy="0 0 0"
+        xyz="${lower_vertical_length} 0 0"
+    />
+    <parent link="lower_left_${number}"/>
+    <child link="lower_bot_${number}"/>
+</joint>
+</xacro:macro>
+
+<xacro:joint_lower_left_to_lower_bot number="1"/>
+<xacro:joint_lower_left_to_lower_bot number="2"/>
+<xacro:joint_lower_left_to_lower_bot number="3"/>
+
+<xacro:macro name="joint_lower_right_to_lower_bot" params="number">
+<joint name="lower_right_to_lower_bot_${number}" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit
+        effort="1000.0"
+        lower="${-pi/2}"
+        upper="${pi/2}"
+        velocity="0.5"
+    />
+    <origin
+        rpy="0 0 0"
+        xyz="${lower_vertical_length} 0 0"
+    />
+    <parent link="lower_right_${number}"/>
+    <child link="lower_bot_${number}"/>
+</joint>
+</xacro:macro>
+
+<gazebo>
+<xacro:joint_lower_right_to_lower_bot number="1"/>
+<xacro:joint_lower_right_to_lower_bot number="2"/>
+<xacro:joint_lower_right_to_lower_bot number="3"/>
+</gazebo>
+
+<xacro:macro name="link_lower_bot" params="number">
+<link name="lower_bot_${number}">
+<xacro:cylinder_inertial
+    mass="${lower_horizontal_mass}"
+    radius="${lower_radius}"
+    length="${lower_horizontal_length}"
+    rpy="0 ${pi/2} ${pi/2}"
+/>
+<visual>
+    <geometry>
+        <cylinder
+            length="${lower_horizontal_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} ${pi/2}"
+        xyz="0 ${-lower_horizontal_length/2} 0"
+    />
+    <material name="physical_link"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${lower_horizontal_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} ${pi/2}"
+        xyz="0 ${-lower_horizontal_length/2} 0"
+    />
+</collision>
+</link>
+</xacro:macro>
+
+<xacro:link_lower_bot number="1"/>
+<xacro:link_lower_bot number="2"/>
+<xacro:link_lower_bot number="3"/>
+
+</robot>
