@@ -69,15 +69,13 @@ void compute_fk(
     const KDL::Tree &tree,
     std::map<std::string, double> joint_values)
 {
-    std::vector<double> theta;
-    std::vector<double> alpha;
-    std::vector<double> beta;
+    std::vector<double> theta(3);
+    std::vector<double> alpha(3);
+    std::vector<double> beta(3);
 
-    // theta[0] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
-    // theta[1] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
-    // theta[2] = joint_state.position[(std::size_t)DeltaJoint::BASE_TO_UPPER_1];
-
-    // Calculate pos
+    theta[0] = joint_values["base_to_upper_1"];
+    theta[1] = joint_values["base_to_upper_2"];
+    theta[2] = joint_values["base_to_upper_3"];
 
     // Calculate the necessary alpha_i and beta_i
 
@@ -142,6 +140,20 @@ public:
             ROS_ERROR("Failed to parse urdf file");
         }
 
+        // Add joints to joint_values map
+        std::stack<urdf::LinkConstSharedPtr> links;
+        links.push(model.getRoot());
+        urdf::LinkConstSharedPtr it;
+        while (!links.empty()) {
+            it = links.top();
+            links.pop();
+            for (std::size_t joint_i = 0; joint_i < it->child_joints.size(); joint_i++) {
+                joint_values[it->child_joints[joint_i]->name] = 0;
+                links.push(it->child_links[joint_i]);
+                ROS_INFO("%s\n", it->child_joints[joint_i]->name.c_str());
+            }
+        }
+
         // Create KDL tree from URDF.
         // In future, create CGA kinematic tree from urdf
         if (!kdl_parser::treeFromUrdfModel(model, tree)) {
@@ -151,8 +163,6 @@ public:
 
     void joint_states_callback(sensor_msgs::JointState joint_state)
     {
-        std::map<std::string, double> joint_values;
-
         // Copy independent joint values to map
         for (std::size_t i = 0; i < joint_state.name.size(); i++) {
             joint_values[joint_state.name[i]] = joint_state.position[i];
@@ -194,6 +204,7 @@ public:
     }
 
 private:
+    std::map<std::string, double> joint_values;
     ros::Subscriber joint_states_sub;
     tf2_ros::TransformBroadcaster tf_broadcaster;
     geometry_msgs::TransformStamped tf_msg;

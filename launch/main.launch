@@ -4,7 +4,7 @@
     <param name="robot_description"
         command="xacro '$(find cga_kinematics)/model/delta.urdf.xacro'"/>
 
-    <!-- Simple here to make certain joints get ignored by
+    <!-- Simply here to make certain joints get ignored by
     joint_state_publisher_gui. Can be used to setup dependent joints, but
     we are doing this manually, so ignore it here -->
     <rosparam
@@ -21,27 +21,12 @@
         <remap from="joint_states" to="joint_states_in"/>
     </node>
 
-    <!-- Load loops parameter, which specifies which links should be constrained
-    together to form loops -->
-    <rosparam
-        file="$(find cga_kinematics)/config/loops.yaml"
-        command="load"
-    />
-
     <node
         name="cga_fk"
         pkg="cga_kinematics"
         type="cga_fk"
         output="screen">
-        <remap from="joint_states_out" to="joint_states"/>
     </node>
-
-    <node 
-        pkg="robot_state_publisher" 
-        type="robot_state_publisher"
-        name="robot_state_publisher"
-        output="screen"
-    />
 
     <node
         name="rviz" pkg="rviz" type="rviz"

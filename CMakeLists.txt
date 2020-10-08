@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   tf2_ros
   urdf
+  kdl_parser
 )
 
 catkin_package()
