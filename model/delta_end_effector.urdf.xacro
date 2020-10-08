@@ -24,7 +24,7 @@
 <!-- ===== ACTUAL END EFFECTOR ===== -->
 
 <joint name="lower_bot_1_to_virtual_end_effector_offset" type="revolute">
-    <axis xyz="0 1 0"/>
+    <axis xyz="0 -1 0"/>
     <limit
         effort="1000.0"
         lower="${-pi/2}"
@@ -32,8 +32,8 @@
         velocity="0.5"
     />
     <origin
-        rpy="${pi} 0 0"
-        xyz="${end_effector_radius} ${-lower_horizontal_length/2} 0"
+        rpy="0 0 0"
+        xyz="0 ${-lower_horizontal_length/2} 0"
     />
     <parent link="lower_bot_1"/>
     <child link="virtual_end_effector_offset"/>
@@ -53,7 +53,7 @@
 </link>
 
 <joint name="virtual_end_effector_offset_to_end_effector" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="${end_effector_radius} 0 0"/>
     <parent link="virtual_end_effector_offset"/>
     <child link="end_effector"/>
 </joint>

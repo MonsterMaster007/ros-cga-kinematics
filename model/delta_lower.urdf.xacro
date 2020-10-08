@@ -13,7 +13,7 @@
         velocity="0.5"
     />
     <origin
-        rpy="0 0 0"
+        rpy="0 0 ${pi}"
         xyz="${upper_length} 0 0"
     />
     <parent link="upper_${number}"/>
@@ -72,7 +72,7 @@
         velocity="0.5"
     />
     <origin
-        rpy="0 ${pi/2} 0"
+        rpy="0 0 0"
         xyz="0 ${lower_horizontal_length/2} 0"
     />
     <parent link="lower_top_${number}"/>
@@ -137,7 +137,7 @@
         velocity="0.5"
     />
     <origin
-        rpy="0 ${pi/2} 0"
+        rpy="0 0 0"
         xyz="0 ${-lower_horizontal_length/2} 0"
     />
     <parent link="lower_top_${number}"/>
