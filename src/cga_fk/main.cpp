@@ -24,6 +24,20 @@ const double vector_norm(const urdf::Vector3 &vec)
     return sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
 }
 
+void log_cga(const cga::CGA &mvec)
+{
+    printf("[");
+    for (std::size_t i = 0; i < cga::COUNT; i++) {
+        printf("%f ", mvec[i]);
+    }
+    printf("]\n");
+}
+
+void log_cga3(const cga::CGA &mvec)
+{
+    ROS_INFO("[%f, %f, %f]", mvec[cga::E1], mvec[cga::E2], mvec[cga::E3]);
+}
+
 struct DeltaDimensions {
     std::vector<cga::CGA> s;
     std::vector<cga::CGA> s_perp;
@@ -80,18 +94,18 @@ struct DeltaDimensions {
                 parent_to_joint_origin_transform.position);
 
         lower_length[0] = vector_norm(
-            model.getJoint("virtual_end_effector_1")->
+            model.getJoint("virtual_lower_to_virtual_end_effector_1")->
                 parent_to_joint_origin_transform.position);
         lower_length[1] = vector_norm(
-            model.getJoint("virtual_end_effector_2")->
+            model.getJoint("virtual_lower_to_virtual_end_effector_2")->
                 parent_to_joint_origin_transform.position);
         lower_length[2] = vector_norm(
-            model.getJoint("virtual_end_effector_3")->
+            model.getJoint("virtual_lower_to_virtual_end_effector_3")->
                 parent_to_joint_origin_transform.position);
     }
 };
 
-void compute_fk(
+bool compute_fk(
     const DeltaDimensions &dim,
     std::map<std::string, double> &joint_values)
 {
@@ -110,9 +124,10 @@ void compute_fk(
     std::vector<cga::CGA> PiA(3);
 
     for (std::size_t i = 0; i < 3; i++) {
-        a[i] = (dim.base_radius[i] - dim.ee_radius[i]) * dim.s[i]
-            + dim.upper_length[i] * sin(theta[i]) * cga::e3;
-        A[i] = cga::up(A[i]);
+        a[i] = (dim.base_radius[i] - dim.ee_radius[i]
+                + dim.upper_length[i] * cos(theta[i])) * dim.s[i]
+            - dim.upper_length[i] * sin(theta[i]) * cga::e3;
+        A[i] = cga::up(a[i]);
         PiA[i] = A[i] - 0.5*pow(dim.lower_length[i], 2)*cga::ninf;
     }
 
@@ -122,16 +137,19 @@ void compute_fk(
     Y = -1 * (~P * (T|cga::ninf) * P);
     y = down(Y);
 
+    // TODO: Check there is a possible solution
+    // If not, return false and don't update joint_values
+
     cga::CGA lower_disp;
     for (std::size_t i = 0; i < 3; i++) {
         lower_disp = y - a[i];
         alpha[i] = atan2(
-            (lower_disp[i]|cga::e3)[0],
-            (lower_disp[i]|dim.s[i])[0]
+            -(lower_disp|cga::e3)[0],
+            -(lower_disp|dim.s[i])[0]
         );
-        beta[i] = atan2(
-            (lower_disp[i]|cga::e3)[0],
-            (lower_disp[i]|dim.s_perp[i])[0]
+        beta[i] = -atan2(
+            (lower_disp|dim.s_perp[i])[0],
+            -(lower_disp|cga::e3)[0]
         );
     }
 
@@ -166,6 +184,8 @@ void compute_fk(
     joint_values["lower_left_to_lower_bot_3"] = beta[2];
 
     joint_values["lower_bot_1_to_virtual_end_effector_offset"] = alpha[0];
+    
+    return true;
 }
 
 class Node {
@@ -200,24 +220,26 @@ public:
                 links.push(it->child_links[joint_i]);
             }
         }
+        joint_state_msg.position.resize(joint_state_msg.name.size());
+        joint_state_msg.velocity.resize(joint_state_msg.name.size());
+        joint_state_msg.effort.resize(joint_state_msg.name.size());
     }
 
-    void joint_states_callback(sensor_msgs::JointState joint_state)
+    void joint_states_callback(sensor_msgs::JointState joint_state_msg_in)
     {
         // Copy independent joint values to map
-        for (std::size_t i = 0; i < joint_state.name.size(); i++) {
-            joint_values[joint_state.name[i]] = joint_state.position[i];
+        for (std::size_t i = 0; i < joint_state_msg_in.name.size(); i++) {
+            joint_values[joint_state_msg_in.name[i]] = joint_state_msg_in.position[i];
         }
 
         // Complete remaining joint values by satisfying constraints
         compute_fk(dim, joint_values);
 
-        auto it_in = joint_values.cbegin();
-        auto it_out = joint_state_msg.position.begin();
-        while (it_in != joint_values.cend()) {
-            *(it_out++) = (it_in++)->second;
+        for (std::size_t i = 0; i < joint_state_msg.name.size(); i++) {
+            joint_state_msg.position[i] = joint_values[joint_state_msg.name[i]];
         }
 
+        joint_state_msg.header.stamp = joint_state_msg_in.header.stamp;
         joint_state_pub.publish(joint_state_msg);
     }
 

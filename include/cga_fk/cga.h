@@ -21,10 +21,10 @@ enum Basis {
 class CGA {
   public:
     CGA ()  {
-        std::fill(mvec, mvec + (size_t)Basis::COUNT/4, 0.0f );
+        std::fill(mvec, mvec + (size_t)Basis::COUNT, 0.0f );
     }
     CGA (float f, int idx=0) {
-        std::fill(mvec, mvec + (size_t)Basis::COUNT/4, 0.0f );
+        std::fill(mvec, mvec + (size_t)Basis::COUNT, 0.0f );
         mvec[idx] = f;
     }
     float& operator[](size_t index) {
@@ -729,7 +729,7 @@ static CGA I5(1.0f, E12345);
 
 static CGA up(const cga::CGA &mvec)
 {
-  return mvec + 0.5f*(mvec*mvec)*ninf + n0;
+    return mvec + 0.5f*(mvec*mvec)*ninf + n0;
 }
 
 const CGA down(const CGA &mvec)
