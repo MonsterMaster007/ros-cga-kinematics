@@ -172,11 +172,12 @@ class Node {
 public:
     Node(ros::NodeHandle &n)
     {
-        joint_states_sub = n.subscribe(
-            "joint_states_in",
-            1,
-            &Node::joint_states_callback,
-            this
+        joint_state_sub = n.subscribe(
+            "joint_states_in", 1, &Node::joint_states_callback, this
+        );
+
+        joint_state_pub = n.advertise<sensor_msgs::JointState>(
+            "joint_states_out", 1
         );
 
         // Parse urdf
@@ -185,7 +186,8 @@ public:
         }
         dim.load_model(model);
 
-        // Add joints to joint_values map
+        // Create joint_values map, and joint_state_msg
+
         std::stack<urdf::LinkConstSharedPtr> links;
         links.push(model.getRoot());
         urdf::LinkConstSharedPtr it;
@@ -193,6 +195,7 @@ public:
             it = links.top();
             links.pop();
             for (std::size_t joint_i = 0; joint_i < it->child_joints.size(); joint_i++) {
+                joint_state_msg.name.push_back(it->child_joints[joint_i]->name);
                 joint_values[it->child_joints[joint_i]->name] = 0;
                 links.push(it->child_links[joint_i]);
             }
@@ -208,13 +211,22 @@ public:
 
         // Complete remaining joint values by satisfying constraints
         compute_fk(dim, joint_values);
+
+        auto it_in = joint_values.cbegin();
+        auto it_out = joint_state_msg.position.begin();
+        while (it_in != joint_values.cend()) {
+            *(it_out++) = (it_in++)->second;
+        }
+
+        joint_state_pub.publish(joint_state_msg);
     }
 
 private:
     std::map<std::string, double> joint_values;
-    ros::Subscriber joint_states_sub;
-    tf2_ros::TransformBroadcaster tf_broadcaster;
-    geometry_msgs::TransformStamped tf_msg;
+    ros::Subscriber joint_state_sub;
+
+    sensor_msgs::JointState joint_state_msg;
+    ros::Publisher joint_state_pub;
 
     urdf::Model model;
     DeltaDimensions dim;
