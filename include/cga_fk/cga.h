@@ -39,11 +39,11 @@ class CGA {
     const float& operator[](Basis basis) const {
         return mvec[(size_t)basis];
     }
-    CGA Conjugate(); 
-    CGA Involute();
-    float norm();
-    float inorm();
-    CGA normalized();
+    CGA Conjugate() const; 
+    CGA Involute() const;
+    float norm() const;
+    float inorm() const;
+    CGA normalized() const;
   private:  
     float mvec[(size_t)Basis::COUNT];
 };
@@ -135,7 +135,7 @@ inline CGA operator ! (const CGA &a) {
 // CGA.Conjugate : res = a.Conjugate()
 // Clifford Conjugation
 //***********************
-inline CGA CGA::Conjugate () {
+inline CGA CGA::Conjugate () const {
   CGA res;
   res[0]=this->mvec[0];
   res[1]=-this->mvec[1];
@@ -176,7 +176,7 @@ inline CGA CGA::Conjugate () {
 // CGA.Involute : res = a.Involute()
 // Main involution
 //***********************
-inline CGA CGA::Involute () {
+inline CGA CGA::Involute () const {
   CGA res;
   res[0]=this->mvec[0];
   res[1]=-this->mvec[1];
@@ -705,10 +705,9 @@ inline CGA operator - (const CGA &a, const float &b) {
   return res;
 };
 
-
-inline float CGA::norm() { return sqrt(fabs(((*this)*Conjugate()).mvec[0])); }
-inline float CGA::inorm() { return (!(*this)).norm(); }
-inline CGA CGA::normalized() { return (*this) * (1/norm()); }
+inline float CGA::norm() const { return sqrt(fabs(((*this)*Conjugate()).mvec[0])); }
+inline float CGA::inorm() const { return (!(*this)).norm(); }
+inline CGA CGA::normalized() const { return (*this) * (1/norm()); }
 
 
 // PGA is point based. Vectors are points.
@@ -719,11 +718,28 @@ static CGA e1(1.0f,1), e2(1.0f,2), e3(1.0f,3), e4(1.0f,4), e5(1.0f,5);
 static CGA ninf = e4+e5, n0 = 0.5f*(e5-e4);
 
 // create a point from x,y,z coordinates
-static CGA up(float x, float y, float z) {
+static CGA up(float x, float y, float z)
+{
   float d = x*x + y*y + z*z;
   return x*e1 + y*e2 + z*e3 + 0.5f*d*ninf + n0;
 }
 
+static CGA I3(1.0f, E123);
 static CGA I5(1.0f, E12345);
+
+static CGA up(const cga::CGA &mvec)
+{
+  return mvec + 0.5f*(mvec*mvec)*ninf + n0;
+}
+
+const CGA down(const CGA &mvec)
+{
+    float normalisation = -(mvec|cga::ninf)[cga::SCALAR];
+    CGA result;
+    result[E1] = mvec[E1] / normalisation;
+    result[E2] = mvec[E2] / normalisation;
+    result[E3] = mvec[E3] / normalisation;
+    return result;
+}
 
 } // namespace cga
