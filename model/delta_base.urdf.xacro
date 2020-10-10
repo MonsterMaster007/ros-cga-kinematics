@@ -10,7 +10,7 @@
             radius="${base_radius}"
         />
     </geometry>
-    <material name="physical_link"/>
+    <material name="base"/>
 </visual>
 <collision>
     <geometry>

@@ -1,16 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_materials">
 
-<material name="break_indicator">
-    <color rgba="1 0 0 1"/>
+<material name="base">
+    <color rgba="1 0 1 1"/>
 </material>
 
-<material name="physical_link">
+<material name="upper">
     <color rgba="0 1 1 1"/>
 </material>
 
-<material name="virtual_link">
-    <color rgba="1 0 1 0.5"/>
+<material name="lower">
+    <color rgba="0 1 0 1"/>
+</material>
+
+<material name="end_effector">
+    <color rgba="1 0 1 1"/>
 </material>
 
 </robot>

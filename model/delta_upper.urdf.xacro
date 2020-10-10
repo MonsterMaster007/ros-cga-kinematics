@@ -4,13 +4,13 @@
 
 <!-- ===== JOINTS ===== -->
 
-<xacro:macro name="joint_base_to_upper" params="number yaw">
-<joint name="base_to_upper_${number}" type="revolute">
+<xacro:macro name="joint_theta" params="number yaw">
+<joint name="theta_${number}" type="revolute">
     <axis xyz="0 1 0"/>
     <limit
         effort="1000.0"
-        lower="${joint_lower_limit}"
-        upper="${joint_upper_limit}"
+        lower="${-pi/2}"
+        upper="${pi/2}"
         velocity="0.5"
     />
     <origin
@@ -22,9 +22,9 @@
 </joint>
 </xacro:macro>
 
-<xacro:joint_base_to_upper number="1" yaw="0"/>
-<xacro:joint_base_to_upper number="2" yaw="${pi*2/3}"/>
-<xacro:joint_base_to_upper number="3" yaw="${-pi*2/3}"/>
+<xacro:joint_theta number="1" yaw="0"/>
+<xacro:joint_theta number="2" yaw="${pi*2/3}"/>
+<xacro:joint_theta number="3" yaw="${-pi*2/3}"/>
 
 
 <!-- ===== LINKS ===== -->
@@ -48,7 +48,7 @@
         xyz="${upper_length/2} 0 0"
         rpy="0 ${pi/2} 0"
     />
-    <material name="physical_link"/>
+    <material name="upper"/>
 </visual>
 <collision>
     <geometry>
@@ -68,5 +68,24 @@
 <xacro:link_upper number="1"/>
 <xacro:link_upper number="2"/>
 <xacro:link_upper number="3"/>
+
+<!-- ===== PARALLEL LINKAGE PARENT LINKS ===== -->
+
+<xacro:macro name="parallel_parent" params="parent length child">
+<joint name="${parent}_to_${child}_parent" type="fixed">
+    <origin
+        rpy="0 0 0"
+        xyz="${length} 0 0"
+    />
+    <parent link="${parent}"/>
+    <child link="${child}_parent"/>
+</joint>
+<link name="${child}_parent">
+</link>
+</xacro:macro>
+
+<xacro:parallel_parent parent="upper_1" length="${upper_length}" child="lower_1"/>
+<xacro:parallel_parent parent="upper_2" length="${upper_length}" child="lower_2"/>
+<xacro:parallel_parent parent="upper_3" length="${upper_length}" child="lower_3"/>
 
 </robot>

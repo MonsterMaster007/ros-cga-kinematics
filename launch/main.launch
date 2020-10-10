@@ -10,22 +10,22 @@
         pkg="joint_state_publisher_gui"
         type="joint_state_publisher_gui"
         name="joint_state_publisher_gui">
-        <remap from="joint_states" to="joint_states_in"/>
+        <!--<remap from="joint_states" to="joint_states_in"/>-->
     </node>
 
     <node
         pkg="robot_state_publisher"
         type="robot_state_publisher"
         name="robot_state_publisher">
-        <remap from="joint_states" to="joint_states_out"/>
+        <!--<remap from="joint_states" to="joint_states_out"/>-->
     </node>
 
-    <node
+    <!--<node
         name="cga_fk"
         pkg="cga_kinematics"
         type="cga_fk"
         output="screen">
-    </node>
+    </node>-->
 
     <node
         name="rviz" pkg="rviz" type="rviz"

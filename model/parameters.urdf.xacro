@@ -8,11 +8,8 @@
 <xacro:property name="upper_radius" value="0.01"/>
 
 <xacro:property name="lower_radius" value="0.01"/>
-<xacro:property name="lower_horizontal_length" value="0.4"/>
-<xacro:property name="lower_vertical_length" value="0.6"/>
-
-<xacro:property name="joint_lower_limit" value="${-pi/2}"/>
-<xacro:property name="joint_upper_limit" value="${pi/2}"/>
+<xacro:property name="lower_width" value="0.4"/>
+<xacro:property name="lower_length" value="0.6"/>
 
 <xacro:property name="end_effector_radius" value="0.2"/>
 <xacro:property name="end_effector_depth" value="0.03"/>

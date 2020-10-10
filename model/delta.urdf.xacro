@@ -8,7 +8,6 @@
 <xacro:include filename="delta_base.urdf.xacro"/>
 <xacro:include filename="delta_upper.urdf.xacro"/>
 <xacro:include filename="delta_lower.urdf.xacro"/>
-<xacro:include filename="delta_lower_virtual.urdf.xacro"/>
 <xacro:include filename="delta_end_effector.urdf.xacro"/>
 
 </robot>

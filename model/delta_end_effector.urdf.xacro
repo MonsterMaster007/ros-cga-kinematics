@@ -3,30 +3,23 @@
 
 <!-- ===== END EFFECTOR ===== -->
 
-<joint name="lower_bot_1_to_virtual_end_effector_offset" type="revolute">
-    <axis xyz="0 -1 0"/>
-    <limit
-        effort="1000.0"
-        lower="${-pi/2}"
-        upper="${pi/2}"
-        velocity="0.5"
-    />
-    <origin
-        rpy="0 0 0"
-        xyz="0 ${-lower_horizontal_length/2} 0"
-    />
-    <parent link="lower_bot_1"/>
-    <child link="virtual_end_effector_offset"/>
-</joint>
-
-<link name="virtual_end_effector_offset">
-</link>
-
-<joint name="virtual_end_effector_offset_to_end_effector" type="fixed">
+<xacro:macro name="joint_end_effector" params="number yaw">
+<joint name="lower_${number}_end_to_end_effector" type="fixed">
     <origin rpy="0 0 0" xyz="${end_effector_radius} 0 0"/>
-    <parent link="virtual_end_effector_offset"/>
+    <origin
+        rpy="0 ${pi} ${yaw}"
+        xyz="${end_effector_radius} 0 0"
+    />
+    <parent link="lower_${number}_end"/>
     <child link="end_effector"/>
 </joint>
+</xacro:macro>
+
+<xacro:joint_end_effector number="1" yaw="0"/>
+<gazebo>
+<xacro:joint_end_effector number="2" yaw="${pi*2/3}"/>
+<xacro:joint_end_effector number="3" yaw="${pi*4/3}"/>
+</gazebo>
 
 <link name="end_effector">
     <visual>
@@ -37,7 +30,7 @@
             />
         </geometry>
         <origin rpy="0 0 0" xyz="0 0 0"/>
-        <material name="physical_link"/>
+        <material name="end_effector"/>
     </visual>
     <collision>
         <geometry>
