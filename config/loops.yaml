@@ -1,18 +1,54 @@
 loops:
-    - parents:
-        - end_effector_1
-        - end_effector_2
-        - end_effector_3
-      child: end_effector
-    - parents:
-        - lower_left_bot_1
-        - lower_right_bot_1
-      child: lower_left_bot_1
-    - parents:
-        - lower_left_bot_2
-        - lower_right_bot_2
-      child: lower_left_bot_2
-    - parents:
-        - lower_left_bot_3
-        - lower_right_bot_3
-      child: lower_left_bot_3
+    delta: {
+        class: delta
+        joints: {
+            theta_1: theta_1
+            theta_2: theta_2
+            theta_3: theta_3
+            lower_1_alpha: lower_1_alpha
+            lower_1_L_beta_top: lower_1_L_beta_top
+            lower_1_L_gamma: lower_1_L_gamma
+            lower_2_alpha: lower_2_alpha
+            lower_2_L_beta_top: lower_2_L_beta_top
+            lower_2_L_gamma: lower_2_L_gamma
+            lower_3_alpha: lower_3_alpha
+            lower_3_L_beta_top: lower_3_L_beta_top
+            lower_3_L_gamma: lower_3_L_gamma
+        }
+    }
+
+    lower_1: {
+        class: parallel
+        joints: {
+            alpha: lower_1_alpha
+            L_beta_top: lower_1_L_beta_top
+            L_beta_bot: lower_1_L_beta_bot
+            L_gamma: lower_1_L_gamma
+            R_beta_top: lower_1_R_beta_top
+            R_beta_bot: lower_1_R_beta_bot
+        }
+    }
+
+    lower_2: {
+        class: parallel
+        joints: {
+            alpha: lower_2_alpha
+            L_beta_top: lower_2_L_beta_top
+            L_beta_bot: lower_2_L_beta_bot
+            L_gamma: lower_2_L_gamma
+            R_beta_top: lower_2_R_beta_top
+            R_beta_bot: lower_2_R_beta_bot
+        }
+    }
+
+    lower_3: {
+        class: parallel
+        joints: {
+            alpha: lower_3_alpha
+            L_beta_top: lower_3_L_beta_top
+            L_beta_bot: lower_3_L_beta_bot
+            L_gamma: lower_3_L_gamma
+            R_beta_top: lower_3_R_beta_top
+            R_beta_bot: lower_3_R_beta_bot
+        }
+    }

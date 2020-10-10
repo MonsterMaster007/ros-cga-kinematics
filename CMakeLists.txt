@@ -8,7 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   tf2_ros
   urdf
-  kdl_parser
 )
 
 catkin_package()
@@ -17,12 +16,16 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(cga_fk
-    src/cga_fk/main.cpp
+# In future, put contraint code in library target
+add_executable(loop_fk
+    src/loop_fk/main.cpp
+    src/constraint/constraint.cpp
+    src/constraint/delta.cpp
+    src/constraint/parallel.cpp
 )
-target_link_libraries(cga_fk
+target_link_libraries(loop_fk
     ${catkin_LIBRARIES}
 )
-target_include_directories(cga_fk PRIVATE
-    include/cga_fk
+target_include_directories(loop_fk PRIVATE
+    include
 )

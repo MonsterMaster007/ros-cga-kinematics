@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <stack>
 
-#include "cga.h"
+#include "cga/cga.h"
 
 const cga::CGA vector_to_cga(const urdf::Vector3 &vec)
 {
