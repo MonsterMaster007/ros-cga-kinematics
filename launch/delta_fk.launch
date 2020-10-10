@@ -16,17 +16,17 @@
     </node>
 
     <node
+        pkg="cga_kinematics"
+        type="delta_fk"
+        name="delta_fk"
+        output="screen">
+    </node>
+
+    <node
         pkg="robot_state_publisher"
         type="robot_state_publisher"
         name="robot_state_publisher">
         <remap from="joint_states" to="joint_states_out"/>
-    </node>
-
-    <node
-        pkg="cga_kinematics"
-        type="loop_fk"
-        name="loop_fk"
-        output="screen">
     </node>
 
     <node

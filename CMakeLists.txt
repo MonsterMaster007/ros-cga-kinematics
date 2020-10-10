@@ -17,14 +17,26 @@ include_directories(
 )
 
 # In future, put contraint code in library target
-add_executable(loop_fk
-    src/loop_fk/main.cpp
+add_executable(delta_fk
+    src/delta_fk/main.cpp
     src/constraint/delta.cpp
     src/constraint/parallel.cpp
 )
-target_link_libraries(loop_fk
+target_link_libraries(delta_fk
     ${catkin_LIBRARIES}
 )
-target_include_directories(loop_fk PRIVATE
+target_include_directories(delta_fk PRIVATE
+    include
+)
+
+add_executable(delta_ik
+    src/delta_ik/main.cpp
+    src/constraint/delta.cpp
+    src/constraint/parallel.cpp
+)
+target_link_libraries(delta_ik
+    ${catkin_LIBRARIES}
+)
+target_include_directories(delta_ik PRIVATE
     include
 )

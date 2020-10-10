@@ -9,6 +9,15 @@ const cga::CGA vector_to_cga(const urdf::Vector3 &vec)
     return result;
 }
 
+const cga::CGA vector_to_cga(const geometry_msgs::Pose::_position_type &vec)
+{
+    cga::CGA result;
+    result[cga::E1] = vec.x;
+    result[cga::E2] = vec.y;
+    result[cga::E3] = vec.z;
+    return result;
+}
+
 const double vector_norm(const urdf::Vector3 &vec)
 {
     return sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
@@ -137,8 +146,41 @@ bool loop::Delta::apply_fk(std::map<std::string, double> &positions)const
     return true;
 }
 
-bool loop::Delta::apply_ik(const urdf::Pose &pose, std::map<std::string, double> &positions)const
+bool loop::Delta::apply_ik(const geometry_msgs::Pose &pose, std::map<std::string, double> &positions)const
 {
-    // TODO
+    cga::CGA y = vector_to_cga(pose.position);
+
+    std::vector<cga::CGA> C(3), Sigma(3);
+    for (std::size_t i = 0; i < 3; i++) {
+        C[i] = (up(base_radius[i]*s[i]) - 0.5*pow(upper_length[i], 2)*cga::ninf)^
+            (cga::I3*(s[i]^cga::e3));
+        Sigma[i] = up(y + ee_radius[i]*s[i]) - 0.5*pow(lower_length[i], 2)*cga::ninf;
+    }
+
+    std::vector<cga::CGA> T(3), P(3), A(3), a(3), z(3);
+    for (std::size_t i = 0; i < 3; i++) {
+        T[i] = -1*(C[i]^Sigma[i])*cga::I5;
+        // Check valid:
+        if ((T[i]*T[i])[0] < 0) return false;
+
+        P[i] = 0.5*(1 + T[i]*(1 / sqrt((T[i]*T[i])[0])) );
+        A[i] = -1*(~P[i])*(T[i]|cga::ninf)*P[i];
+        a[i] = down(A[i]);
+        z[i] = a[i] - ee_radius[i]*s[i];
+    }
+
+    positions[joints.at("theta_1")] = atan2(
+        (z[0]|cga::e3)[0],
+        (z[0]|s[0])[0]
+    );
+    positions[joints.at("theta_2")] = atan2(
+        (z[1]|cga::e3)[0],
+        (z[1]|s[1])[0]
+    );
+    positions[joints.at("theta_3")] = atan2(
+        (z[2]|cga::e3)[0],
+        (z[2]|s[2])[0]
+    );
+
     return true;
 }

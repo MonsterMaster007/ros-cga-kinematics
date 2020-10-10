@@ -11,7 +11,7 @@ public:
     Delta(const urdf::Model &model, const std::map<std::string, std::string> &joints);
     virtual ~Delta() {}
     bool apply_fk(std::map<std::string, double> &positions)const;
-    bool apply_ik(const urdf::Pose &pose, std::map<std::string, double> &positions)const;
+    bool apply_ik(const geometry_msgs::Pose &pose, std::map<std::string, double> &positions)const;
 private:
     std::vector<cga::CGA> s;
     std::vector<cga::CGA> s_perp;

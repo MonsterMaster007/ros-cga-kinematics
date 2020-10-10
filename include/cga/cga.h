@@ -26,29 +26,29 @@ class CGA {
     CGA ()  {
         std::fill(mvec, mvec + (size_t)Basis::COUNT, 0.0f );
     }
-    CGA (float f, int idx=0) {
+    CGA (double f, int idx=0) {
         std::fill(mvec, mvec + (size_t)Basis::COUNT, 0.0f );
         mvec[idx] = f;
     }
-    float& operator[](size_t index) {
+    double& operator[](size_t index) {
         return mvec[index];
     }
-    const float& operator[](size_t index)const {
+    const double& operator[](size_t index)const {
         return mvec[index];
     }
-    float& operator[](Basis basis) {
+    double& operator[](Basis basis) {
         return mvec[(size_t)basis];
     }
-    const float& operator[](Basis basis) const {
+    const double& operator[](Basis basis) const {
         return mvec[(size_t)basis];
     }
     CGA Conjugate() const; 
     CGA Involute() const;
-    float norm() const;
-    float inorm() const;
+    double norm() const;
+    double inorm() const;
     CGA normalized() const;
   private:  
-    float mvec[(size_t)Basis::COUNT];
+    double mvec[(size_t)Basis::COUNT];
 };
 
 
@@ -466,7 +466,7 @@ inline CGA operator - (const CGA &a, const CGA &b) {
 // CGA.smul : res = a * b 
 // scalar/multivector multiplication
 //***********************
-inline CGA operator * (const float &a, const CGA &b) {
+inline CGA operator * (const double &a, const CGA &b) {
   CGA res;
       res[0] = a*b[0];
     res[1] = a*b[1];
@@ -507,7 +507,7 @@ inline CGA operator * (const float &a, const CGA &b) {
 // CGA.muls : res = a * b 
 // multivector/scalar multiplication
 //***********************
-inline CGA operator * (const CGA &a, const float &b) {
+inline CGA operator * (const CGA &a, const double &b) {
   CGA res;
       res[0] = a[0]*b;
     res[1] = a[1]*b;
@@ -548,7 +548,7 @@ inline CGA operator * (const CGA &a, const float &b) {
 // CGA.sadd : res = a + b 
 // scalar/multivector addition
 //***********************
-inline CGA operator + (const float &a, const CGA &b) {
+inline CGA operator + (const double &a, const CGA &b) {
   CGA res;
     res[0] = a+b[0];
       res[1] = b[1];
@@ -589,7 +589,7 @@ inline CGA operator + (const float &a, const CGA &b) {
 // CGA.adds : res = a + b 
 // multivector/scalar addition
 //***********************
-inline CGA operator + (const CGA &a, const float &b) {
+inline CGA operator + (const CGA &a, const double &b) {
   CGA res;
     res[0] = a[0]+b;
       res[1] = a[1];
@@ -630,7 +630,7 @@ inline CGA operator + (const CGA &a, const float &b) {
 // CGA.ssub : res = a - b 
 // scalar/multivector subtraction
 //***********************
-inline CGA operator - (const float &a, const CGA &b) {
+inline CGA operator - (const double &a, const CGA &b) {
   CGA res;
     res[0] = a-b[0];
       res[1] = -b[1];
@@ -671,7 +671,7 @@ inline CGA operator - (const float &a, const CGA &b) {
 // CGA.subs : res = a - b 
 // multivector/scalar subtraction
 //***********************
-inline CGA operator - (const CGA &a, const float &b) {
+inline CGA operator - (const CGA &a, const double &b) {
   CGA res;
     res[0] = a[0]-b;
       res[1] = a[1];
@@ -708,8 +708,8 @@ inline CGA operator - (const CGA &a, const float &b) {
   return res;
 };
 
-inline float CGA::norm() const { return sqrt(fabs(((*this)*Conjugate()).mvec[0])); }
-inline float CGA::inorm() const { return (!(*this)).norm(); }
+inline double CGA::norm() const { return sqrt(fabs(((*this)*Conjugate()).mvec[0])); }
+inline double CGA::inorm() const { return (!(*this)).norm(); }
 inline CGA CGA::normalized() const { return (*this) * (1/norm()); }
 
 
@@ -721,9 +721,9 @@ static CGA e1(1.0f,1), e2(1.0f,2), e3(1.0f,3), e4(1.0f,4), e5(1.0f,5);
 static CGA ninf = e4+e5, n0 = 0.5f*(e5-e4);
 
 // create a point from x,y,z coordinates
-static CGA up(float x, float y, float z)
+static CGA up(double x, double y, double z)
 {
-  float d = x*x + y*y + z*z;
+  double d = x*x + y*y + z*z;
   return x*e1 + y*e2 + z*e3 + 0.5f*d*ninf + n0;
 }
 
@@ -737,7 +737,7 @@ static CGA up(const cga::CGA &mvec)
 
 static const CGA down(const CGA &mvec)
 {
-    float normalisation = -(mvec|cga::ninf)[cga::SCALAR];
+    double normalisation = -(mvec|cga::ninf)[cga::SCALAR];
     CGA result;
     result[E1] = mvec[E1] / normalisation;
     result[E2] = mvec[E2] / normalisation;
