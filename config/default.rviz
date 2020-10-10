@@ -54,7 +54,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 0.800000011920929
+    - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
       Enabled: true
@@ -69,6 +69,18 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        chain_1_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        chain_2_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        chain_3_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         end_effector:
           Alpha: 1
           Show Axes: false
@@ -186,102 +198,19 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        base:
-          Value: true
-        end_effector:
-          Value: true
-        lower_1_L_link:
-          Value: true
-        lower_1_L_link_end:
-          Value: true
-        lower_1_R_link:
-          Value: true
-        lower_1_R_link_end:
-          Value: true
-        lower_1_end:
-          Value: true
-        lower_1_parent:
-          Value: true
-        lower_1_root:
-          Value: true
-        lower_2_L_link:
-          Value: true
-        lower_2_L_link_end:
-          Value: true
-        lower_2_R_link:
-          Value: true
-        lower_2_R_link_end:
-          Value: true
-        lower_2_end:
-          Value: true
-        lower_2_parent:
-          Value: true
-        lower_2_root:
-          Value: true
-        lower_3_L_link:
-          Value: true
-        lower_3_L_link_end:
-          Value: true
-        lower_3_R_link:
-          Value: true
-        lower_3_R_link_end:
-          Value: true
-        lower_3_end:
-          Value: true
-        lower_3_parent:
-          Value: true
-        lower_3_root:
-          Value: true
-        upper_1:
-          Value: true
-        upper_2:
-          Value: true
-        upper_3:
-          Value: true
       Marker Scale: 0.5
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: false
       Tree:
-        base:
-          upper_1:
-            lower_1_parent:
-              lower_1_root:
-                lower_1_L_link:
-                  lower_1_L_link_end:
-                    lower_1_end:
-                      end_effector:
-                        {}
-                lower_1_R_link:
-                  lower_1_R_link_end:
-                    {}
-          upper_2:
-            lower_2_parent:
-              lower_2_root:
-                lower_2_L_link:
-                  lower_2_L_link_end:
-                    lower_2_end:
-                      {}
-                lower_2_R_link:
-                  lower_2_R_link_end:
-                    {}
-          upper_3:
-            lower_3_parent:
-              lower_3_root:
-                lower_3_L_link:
-                  lower_3_L_link_end:
-                    lower_3_end:
-                      {}
-                lower_3_R_link:
-                  lower_3_R_link_end:
-                    {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -325,10 +254,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7252019643783569
+      Pitch: 0.3202033042907715
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.4804179072380066
+      Yaw: 2.170421600341797
     Saved: ~
 Window Geometry:
   Displays:

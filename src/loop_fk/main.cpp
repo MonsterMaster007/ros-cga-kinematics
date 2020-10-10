@@ -53,54 +53,54 @@ struct DeltaDimensions {
     void load_model(const urdf::Model &model)
     {
         s[0] = vector_to_cga(
-            model.getJoint("base_to_upper_1")->
+            model.getJoint("theta_1")->
                 parent_to_joint_origin_transform.position);
         base_radius[0] = s[0].norm();
         s[0] = s[0].normalized();
         s_perp[0] = -1 * cga::I3*(cga::e3^s[0]);
 
         s[1] = vector_to_cga(
-            model.getJoint("base_to_upper_2")->
+            model.getJoint("theta_2")->
                 parent_to_joint_origin_transform.position);
         base_radius[1] = s[1].norm();
         s[1] = s[1].normalized();
         s_perp[1] = -1 * cga::I3*(cga::e3^s[1]);
 
         s[2] = vector_to_cga(
-            model.getJoint("base_to_upper_3")->
+            model.getJoint("theta_3")->
                 parent_to_joint_origin_transform.position);
         base_radius[2] = s[2].norm();
         s[2] = s[2].normalized();
         s_perp[2] = -1 * cga::I3*(cga::e3^s[2]);
 
         ee_radius[0] = vector_norm(
-            model.getJoint("pseudo_elbow_offset_to_pseudo_elbow_1")->
+            model.getJoint("lower_end_to_chain_end_1")->
                 parent_to_joint_origin_transform.position);
         ee_radius[1] = vector_norm(
-            model.getJoint("pseudo_elbow_offset_to_pseudo_elbow_2")->
+            model.getJoint("lower_end_to_chain_end_2")->
                 parent_to_joint_origin_transform.position);
         ee_radius[2] = vector_norm(
-            model.getJoint("pseudo_elbow_offset_to_pseudo_elbow_3")->
+            model.getJoint("lower_end_to_chain_end_3")->
                 parent_to_joint_origin_transform.position);
 
         upper_length[0] = vector_norm(
-            model.getJoint("upper_to_lower_top_1")->
+            model.getJoint("upper_1_to_lower_1_parent")->
                 parent_to_joint_origin_transform.position);
         upper_length[1] = vector_norm(
-            model.getJoint("upper_to_lower_top_2")->
+            model.getJoint("upper_2_to_lower_2_parent")->
                 parent_to_joint_origin_transform.position);
         upper_length[2] = vector_norm(
-            model.getJoint("upper_to_lower_top_3")->
+            model.getJoint("upper_3_to_lower_3_parent")->
                 parent_to_joint_origin_transform.position);
 
         lower_length[0] = vector_norm(
-            model.getJoint("virtual_lower_to_virtual_end_effector_1")->
+            model.getJoint("lower_1_L_beta_bot")->
                 parent_to_joint_origin_transform.position);
         lower_length[1] = vector_norm(
-            model.getJoint("virtual_lower_to_virtual_end_effector_2")->
+            model.getJoint("lower_2_L_beta_bot")->
                 parent_to_joint_origin_transform.position);
         lower_length[2] = vector_norm(
-            model.getJoint("virtual_lower_to_virtual_end_effector_3")->
+            model.getJoint("lower_3_L_beta_bot")->
                 parent_to_joint_origin_transform.position);
     }
 };
@@ -113,9 +113,9 @@ bool compute_fk(
     std::vector<double> alpha(3);
     std::vector<double> beta(3);
 
-    theta[0] = joint_values["base_to_upper_1"];
-    theta[1] = joint_values["base_to_upper_2"];
-    theta[2] = joint_values["base_to_upper_3"];
+    theta[0] = joint_values["theta_1"];
+    theta[1] = joint_values["theta_2"];
+    theta[2] = joint_values["theta_3"];
 
     // Calculate the necessary alpha_i and beta_i
 
@@ -147,7 +147,7 @@ bool compute_fk(
             -(lower_disp|cga::e3)[0],
             -(lower_disp|dim.s[i])[0]
         );
-        beta[i] = -atan2(
+        beta[i] = atan2(
             (lower_disp|dim.s_perp[i])[0],
             -(lower_disp|cga::e3)[0]
         );
@@ -155,36 +155,30 @@ bool compute_fk(
 
     // Put angles in joint_state message
 
-    joint_values["upper_to_lower_top_1"] = theta[0] + alpha[0];
-    joint_values["upper_to_lower_top_2"] = theta[1] + alpha[1];
-    joint_values["upper_to_lower_top_3"] = theta[2] + alpha[2];
+    joint_values["lower_1_alpha"] = PI - theta[0] - alpha[0];
+    joint_values["lower_2_alpha"] = PI - theta[1] - alpha[1];
+    joint_values["lower_3_alpha"] = PI - theta[2] - alpha[2];
 
-    joint_values["upper_to_pseudo_elbow_offset_1"] = theta[0];
-    joint_values["upper_to_pseudo_elbow_offset_2"] = theta[1];
-    joint_values["upper_to_pseudo_elbow_offset_3"] = theta[2];
+    joint_values["lower_1_L_beta_top"] = beta[0];
+    joint_values["lower_2_L_beta_top"] = beta[1];
+    joint_values["lower_3_L_beta_top"] = beta[2];
 
-    joint_values["pseudo_elbow_offset_to_pseudo_elbow_1"] = alpha[0];
-    joint_values["pseudo_elbow_offset_to_pseudo_elbow_2"] = alpha[1];
-    joint_values["pseudo_elbow_offset_to_pseudo_elbow_3"] = alpha[2];
+    joint_values["lower_1_L_beta_bot"] = -beta[0];
+    joint_values["lower_2_L_beta_bot"] = -beta[1];
+    joint_values["lower_3_L_beta_bot"] = -beta[2];
 
-    joint_values["pseudo_elbow_to_virtual_lower_1"] = beta[0];
-    joint_values["pseudo_elbow_to_virtual_lower_2"] = beta[1];
-    joint_values["pseudo_elbow_to_virtual_lower_3"] = beta[2];
+    joint_values["lower_1_R_beta_top"] = beta[0];
+    joint_values["lower_2_R_beta_top"] = beta[1];
+    joint_values["lower_3_R_beta_top"] = beta[2];
 
-    joint_values["lower_top_to_lower_left_1"] = beta[0];
-    joint_values["lower_top_to_lower_left_2"] = beta[1];
-    joint_values["lower_top_to_lower_left_3"] = beta[2];
+    joint_values["lower_1_R_beta_bot"] = -beta[0];
+    joint_values["lower_2_R_beta_bot"] = -beta[1];
+    joint_values["lower_3_R_beta_bot"] = -beta[2];
 
-    joint_values["lower_top_to_lower_right_1"] = beta[0];
-    joint_values["lower_top_to_lower_right_2"] = beta[1];
-    joint_values["lower_top_to_lower_right_3"] = beta[2];
+    joint_values["lower_1_L_gamma"] = alpha[0];
+    joint_values["lower_2_L_gamma"] = alpha[1];
+    joint_values["lower_3_L_gamma"] = alpha[2];
 
-    joint_values["lower_left_to_lower_bot_1"] = beta[0];
-    joint_values["lower_left_to_lower_bot_2"] = beta[1];
-    joint_values["lower_left_to_lower_bot_3"] = beta[2];
-
-    joint_values["lower_bot_1_to_virtual_end_effector_offset"] = alpha[0];
-    
     return true;
 }
 
@@ -215,8 +209,12 @@ public:
             it = links.top();
             links.pop();
             for (std::size_t joint_i = 0; joint_i < it->child_joints.size(); joint_i++) {
-                joint_state_msg.name.push_back(it->child_joints[joint_i]->name);
-                joint_values[it->child_joints[joint_i]->name] = 0;
+                if (it->child_joints[joint_i]->type != urdf::Joint::FIXED &&
+                    it->child_joints[joint_i]->type != urdf::Joint::FLOATING)
+                {
+                    joint_state_msg.name.push_back(it->child_joints[joint_i]->name);
+                    joint_values[it->child_joints[joint_i]->name] = 0;
+                }
                 links.push(it->child_links[joint_i]);
             }
         }
