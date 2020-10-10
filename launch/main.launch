@@ -4,6 +4,8 @@
     <param name="robot_description"
         command="xacro '$(find cga_kinematics)/model/delta.urdf.xacro'"/>
 
+    <rosparam file="$(find cga_kinematics)/config/loops.yaml" />
+
     <!-- Start joint_state_publisher_gui to create a gui for controlling
     joint angles -->
     <node

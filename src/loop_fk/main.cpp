@@ -221,6 +221,34 @@ public:
         joint_state_msg.position.resize(joint_state_msg.name.size());
         joint_state_msg.velocity.resize(joint_state_msg.name.size());
         joint_state_msg.effort.resize(joint_state_msg.name.size());
+
+        // Extract loops parameter
+        XmlRpc::XmlRpcValue loops;
+        if (n.getParam("loops", loops)) {
+            assert(loops.getType() == XmlRpc::XmlRpcValue::TypeArray);
+            for (std::size_t i = 0; i < loops.size(); i++) {
+                ROS_INFO("Loop %lu", i);
+                std::string class_name(loops[i]["class"]);
+                ROS_INFO("Class: %s", class_name.c_str());
+                XmlRpc::XmlRpcValue &joints = loops[i]["joints"];
+                for (auto it = joints.begin(); it != joints.end(); it++) {
+                    std::string key(it->first);
+                    std::string value(it->second);
+                    ROS_INFO("%s: %s", key.c_str(), value.c_str());
+                }
+                // XmlRpc::XmlRpcValue &joints = loops[i]["joints"];
+                // assert(joints.getType() == XmlRpc::XmlRpcValue::TypeArray);
+                // for (std::size_t j = 0; j < joints.size(); j++) {
+                //     std::string parent_name(joints[j]);
+                //     ROS_INFO("Parent %lu: %s", j, parent_name.c_str());
+                // }
+                // XmlRpc::XmlRpcValue &child = loops[i]["child"];
+                // std::string child_name(child);
+                // ROS_INFO("Child: %s", child_name.c_str());
+            }
+        } else {
+            ROS_INFO("Failed to read loops parameter");
+        }
     }
 
     void joint_states_callback(sensor_msgs::JointState joint_state_msg_in)
