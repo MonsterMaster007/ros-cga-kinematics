@@ -1,5 +1,5 @@
-#ifndef CONSTRAINT_FOUR_BAR_H
-#define CONSTRAINT_FOUR_BAR_H
+#ifndef CONSTRAINT_PARALLEL_H
+#define CONSTRAINT_PARALLEL_H
 
 #include "constraint/constraint.h"
 
@@ -7,8 +7,8 @@ namespace loop {
 
 class Parallel: public Constraint {
 public:
-    virtual ~Parallel();
-    bool construct(const urdf::Model &model, const std::string &param);
+    Parallel(const urdf::Model &model, const std::map<std::string, std::string> &joint_names);
+    virtual ~Parallel() {}
     bool apply_fk(std::map<std::string, double> &positions);
     bool apply_ik(const urdf::Pose &pose, std::map<std::string, double> &positions);
 private:

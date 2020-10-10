@@ -1,14 +1,11 @@
 #include "constraint/parallel.h"
 
-bool construct(const urdf::Model &model, const std::string &param)
+loop::Parallel::Parallel(const urdf::Model &model, const std::map<std::string, std::string> &joint_names)
 {
-    // Retreive joint names from parameter server
-    // Verify they exist
-    return true;
+
 }
 
-bool loop::Parallel::apply_fk(std::map<std::string, double> &positions)
-{
+bool loop::Parallel::apply_fk(std::map<std::string, double> &positions){
     return true;
 }
 

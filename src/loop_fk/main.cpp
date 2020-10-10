@@ -8,6 +8,9 @@
 #include <algorithm>
 #include <stack>
 
+#include "constraint/constraint.h"
+#include "constraint/parallel.h"
+#include "constraint/delta.h"
 #include "cga/cga.h"
 
 const cga::CGA vector_to_cga(const urdf::Vector3 &vec)
@@ -223,28 +226,31 @@ public:
         joint_state_msg.effort.resize(joint_state_msg.name.size());
 
         // Extract loops parameter
+
+        std::map<std::string, std::string> loop_joints;
+        std::vector<std::unique_ptr<loop::Constraint>> loop_constraints;
+
         XmlRpc::XmlRpcValue loops;
         if (n.getParam("loops", loops)) {
             assert(loops.getType() == XmlRpc::XmlRpcValue::TypeArray);
             for (std::size_t i = 0; i < loops.size(); i++) {
                 ROS_INFO("Loop %lu", i);
                 std::string class_name(loops[i]["class"]);
-                ROS_INFO("Class: %s", class_name.c_str());
                 XmlRpc::XmlRpcValue &joints = loops[i]["joints"];
                 for (auto it = joints.begin(); it != joints.end(); it++) {
-                    std::string key(it->first);
-                    std::string value(it->second);
-                    ROS_INFO("%s: %s", key.c_str(), value.c_str());
+                    loop_joints[it->first] = std::string(it->second);
                 }
-                // XmlRpc::XmlRpcValue &joints = loops[i]["joints"];
-                // assert(joints.getType() == XmlRpc::XmlRpcValue::TypeArray);
-                // for (std::size_t j = 0; j < joints.size(); j++) {
-                //     std::string parent_name(joints[j]);
-                //     ROS_INFO("Parent %lu: %s", j, parent_name.c_str());
-                // }
-                // XmlRpc::XmlRpcValue &child = loops[i]["child"];
-                // std::string child_name(child);
-                // ROS_INFO("Child: %s", child_name.c_str());
+                if (class_name == "delta") {
+                    loop_constraints.push_back(std::unique_ptr<loop::Constraint>(
+                        new loop::Delta(model, loop_joints)
+                    ));
+                } else if (class_name == "parallel") {
+                    loop_constraints.push_back(std::unique_ptr<loop::Constraint>(
+                        new loop::Parallel(model, loop_joints)
+                    ));
+                } else {
+                    ROS_INFO("Unknown loop class %s", class_name.c_str());
+                }
             }
         } else {
             ROS_INFO("Failed to read loops parameter");
