@@ -20,6 +20,17 @@
     <parent link="base"/>
     <child link="upper_${number}"/>
 </joint>
+
+<transmission name="theta_${number}_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="theta_${number}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="theta_${number}_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+</transmission>
 </xacro:macro>
 
 <xacro:joint_theta number="1" yaw="0"/>
@@ -107,6 +118,7 @@
     <child link="${child}_parent"/>
 </joint>
 <link name="${child}_parent">
+    <xacro:light_inertial/>
 </link>
 </xacro:macro>
 

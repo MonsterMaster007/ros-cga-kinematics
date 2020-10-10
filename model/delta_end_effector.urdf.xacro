@@ -13,6 +13,7 @@
     <child link="chain_${number}_end"/>
 </joint>
 <link name="chain_${number}_end">
+<xacro:light_inertial/>
 </link>
 </xacro:macro>
 
@@ -29,10 +30,8 @@
 </xacro:macro>
 
 <xacro:joint_chain_end_to_end_effector number="1"/>
-<gazebo>
 <xacro:joint_chain_end_to_end_effector number="2"/>
 <xacro:joint_chain_end_to_end_effector number="3"/>
-</gazebo>
 
 <link name="end_effector">
 <visual>

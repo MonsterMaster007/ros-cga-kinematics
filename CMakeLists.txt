@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   tf2_ros
   urdf
+  gazebo_ros
 )
 
 catkin_package()

@@ -10,4 +10,8 @@
 <xacro:include filename="delta_lower.urdf.xacro"/>
 <xacro:include filename="delta_end_effector.urdf.xacro"/>
 
+<gazebo>
+<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+</gazebo>
+
 </robot>

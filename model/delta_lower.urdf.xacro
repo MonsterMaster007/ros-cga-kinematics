@@ -3,7 +3,8 @@
 
 <!-- ===== LOWER TOP ===== -->
 
-<xacro:macro name="parallel" params="parent name length width link_radius link_material">
+<xacro:macro name="parallel" params="parent name length width link_radius link_material link_mass">
+
 <joint name="${name}_alpha" type="revolute">
     <axis xyz="0 1 0"/>
     <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
@@ -16,7 +17,9 @@
 </joint>
 
 <link name="${name}_root">
+    <xacro:light_inertial/>
 </link>
+
 
 <joint name="${name}_L_beta_top" type="revolute">
     <axis xyz="0 0 1"/>
@@ -30,6 +33,12 @@
 </joint>
 
 <link name="${name}_L_link">
+<xacro:cylinder_inertial
+    mass="${link_mass}"
+    radius="${link_radius}"
+    length="${length}"
+    rpy="0 ${pi/2} 0"
+/>
 <visual>
     <geometry>
         <cylinder
@@ -69,6 +78,7 @@
 </joint>
 
 <link name="${name}_L_link_end">
+    <xacro:light_inertial/>
 </link>
 
 <joint name="${name}_L_gamma" type="revolute">
@@ -94,6 +104,12 @@
 </joint>
 
 <link name="${name}_R_link">
+<xacro:cylinder_inertial
+    mass="${link_mass}"
+    radius="${link_radius}"
+    length="${length}"
+    rpy="0 ${pi/2} 0"
+/>
 <visual>
     <geometry>
         <cylinder
@@ -133,9 +149,9 @@
 </joint>
 
 <link name="${name}_R_link_end">
+    <xacro:light_inertial/>
 </link>
 
-<gazebo>
 <joint name="${name}_R_gamma" type="revolute">
     <axis xyz="0 1 0"/>
     <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
@@ -146,24 +162,27 @@
     <parent link="${name}_R_link_end"/>
     <child link="${name}_end"/>
 </joint>
-</gazebo>
 
 <link name="${name}_end">
+    <xacro:light_inertial/>
 </link>
 
 </xacro:macro>
 
 <xacro:parallel
     parent="lower_1_parent" name="lower_1" length="${lower_length}"
-    width="${lower_width}" link_material="lower" link_radius="${lower_radius}"
+    width="${lower_width}" link_material="lower"
+    link_radius="${lower_radius}" link_mass="${lower_mass/2}"
 />
 <xacro:parallel
     parent="lower_2_parent" name="lower_2" length="${lower_length}"
-    width="${lower_width}" link_material="lower" link_radius="${lower_radius}"
+    width="${lower_width}" link_material="lower"
+    link_radius="${lower_radius}" link_mass="${lower_mass/2}"
 />
 <xacro:parallel
     parent="lower_3_parent" name="lower_3" length="${lower_length}"
-    width="${lower_width}" link_material="lower" link_radius="${lower_radius}"
+    width="${lower_width}" link_material="lower"
+    link_radius="${lower_radius}" link_mass="${lower_mass/2}"
 />
 
 </robot>

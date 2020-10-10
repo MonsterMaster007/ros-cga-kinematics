@@ -1,8 +1,18 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_parameters">
 
+<link name="world"></link>
+<joint name="world_to_base" type="fixed">
+    <origin xyz="0 0 ${upper_length + lower_length + 4*end_effector_depth}" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="base"/>
+</joint>
+
 <link name="base">
-<!-- root link doesn't need inertia -->
+<xacro:cylinder_inertial
+    mass="${base_mass}" radius="${base_radius}" length="${base_depth}"
+    rpy="0 0 0"
+/>
 <visual>
     <geometry>
         <cylinder

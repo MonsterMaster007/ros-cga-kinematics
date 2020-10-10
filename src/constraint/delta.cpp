@@ -109,6 +109,8 @@ bool loop::Delta::apply_fk(std::map<std::string, double> &positions)const
 
     cga::CGA T, P, Y, y;
     T = cga::I5*(PiA[0]^PiA[1]^PiA[2]);
+    if ((T*T)[0] < 0) return false;
+
     P = cga::CGA(1.0f, cga::SCALAR) + T.normalized();
     Y = -1 * (~P * (T|cga::ninf) * P);
     y = cga::down(Y);

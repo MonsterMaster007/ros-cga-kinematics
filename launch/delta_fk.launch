@@ -1,6 +1,4 @@
 <launch>
-    <!-- Provide the robot_description in the standard urdf format, but with
-    the shared link split up to produce a number of chains. -->
     <param name="robot_description"
         command="xacro '$(find cga_kinematics)/model/delta.urdf.xacro'"/>
 
