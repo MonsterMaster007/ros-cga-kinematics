@@ -13,6 +13,12 @@ loops:
             lower_3_alpha: lower_3_alpha
             lower_3_L_beta_top: lower_3_L_beta_top
             lower_3_L_gamma: lower_3_L_gamma
+            to_lower_1: upper_1_to_lower_1_parent
+            to_lower_2: upper_2_to_lower_2_parent
+            to_lower_3: upper_3_to_lower_3_parent
+            to_end_effector_1: lower_end_to_chain_end_1
+            to_end_effector_2: lower_end_to_chain_end_2
+            to_end_effector_3: lower_end_to_chain_end_3
 
     - class: parallel
       joints:

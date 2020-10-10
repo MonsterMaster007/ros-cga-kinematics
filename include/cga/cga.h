@@ -1,3 +1,6 @@
+#ifndef CGA_CGA_H
+#define CGA_CGA_H
+
 // 3D Projective Geometric Algebra
 // Written by a generator written by enki.
 #include <stdio.h>
@@ -732,7 +735,7 @@ static CGA up(const cga::CGA &mvec)
     return mvec + 0.5f*(mvec*mvec)*ninf + n0;
 }
 
-const CGA down(const CGA &mvec)
+static const CGA down(const CGA &mvec)
 {
     float normalisation = -(mvec|cga::ninf)[cga::SCALAR];
     CGA result;
@@ -743,3 +746,5 @@ const CGA down(const CGA &mvec)
 }
 
 } // namespace cga
+
+#endif
