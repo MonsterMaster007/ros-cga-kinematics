@@ -5,7 +5,6 @@
 
 <xacro:macro name="joint_end_effector" params="number yaw">
 <joint name="lower_${number}_end_to_end_effector" type="fixed">
-    <origin rpy="0 0 0" xyz="${end_effector_radius} 0 0"/>
     <origin
         rpy="0 ${pi} ${yaw}"
         xyz="${end_effector_radius} 0 0"
@@ -22,25 +21,68 @@
 </gazebo>
 
 <link name="end_effector">
-    <visual>
-        <geometry>
-            <cylinder
-                length="${end_effector_depth}"
-                radius="${end_effector_radius}"
-            />
-        </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <material name="end_effector"/>
-    </visual>
-    <collision>
-        <geometry>
-            <cylinder
-                length="${end_effector_depth}"
-                radius="${end_effector_radius}"
-            />
-        </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-    </collision>
+<visual>
+    <geometry>
+        <cylinder
+            length="${end_effector_depth}"
+            radius="${end_effector_radius}"
+        />
+    </geometry>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <material name="end_effector"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${end_effector_depth}"
+            radius="${end_effector_radius}"
+        />
+    </geometry>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+</collision>
+
+<visual>
+    <geometry>
+        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
+    </geometry>
+    <origin xyz="${end_effector_radius} 0 0" rpy="0 ${pi/2} ${pi/2}" />
+    <material name="end_effector"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
+    </geometry>
+    <origin xyz="${end_effector_radius} 0 0" rpy="0 ${pi/2} ${pi/2}" />
+</collision>
+
+<visual>
+    <geometry>
+        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
+    </geometry>
+    <origin xyz="${cos(pi*2/3)*end_effector_radius} ${sin(pi*2/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*7/6}" />
+    <material name="end_effector"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
+    </geometry>
+    <origin xyz="${cos(pi*2/3)*end_effector_radius} ${sin(pi*2/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*7/6}" />
+</collision>
+
+<visual>
+    <geometry>
+        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
+    </geometry>
+    <origin xyz="${cos(pi*4/3)*end_effector_radius} ${sin(pi*4/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*11/6}" />
+    <material name="end_effector"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
+    </geometry>
+    <origin xyz="${cos(pi*4/3)*end_effector_radius} ${sin(pi*4/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*11/6}" />
+</collision>
+
 </link>
 
 </robot>

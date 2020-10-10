@@ -62,6 +62,32 @@
         rpy="0 ${pi/2} 0"
     />
 </collision>
+
+<visual>
+    <geometry>
+        <cylinder
+            length="${lower_width}"
+            radius="${upper_radius}"
+        />
+    </geometry>
+    <origin
+        xyz="${upper_length} 0 0"
+        rpy="${pi/2} 0 0"
+    />
+    <material name="upper"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${lower_width}"
+            radius="${upper_radius}"
+        />
+    </geometry>
+    <origin
+        xyz="${upper_length} 0 0"
+        rpy="${pi/2} 0 0"
+    />
+</collision>
 </link>
 </xacro:macro>
 

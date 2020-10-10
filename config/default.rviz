@@ -74,93 +74,96 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        lower_bot_1:
+        lower_1_L_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lower_bot_2:
+        lower_1_L_link_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_1_R_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lower_bot_3:
+        lower_1_R_link_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_1_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_1_parent:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_1_root:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_2_L_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lower_left_1:
+        lower_2_L_link_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_2_R_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lower_left_2:
+        lower_2_R_link_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_2_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_2_parent:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_2_root:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_3_L_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lower_left_3:
+        lower_3_L_link_end:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lower_3_R_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lower_right_1:
+        lower_3_R_link_end:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        lower_right_2:
+        lower_3_end:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        lower_right_3:
+        lower_3_parent:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        lower_top_1:
+        lower_3_root:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        lower_top_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        lower_top_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        pseudo_elbow_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        pseudo_elbow_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        pseudo_elbow_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        pseudo_elbow_offset_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        pseudo_elbow_offset_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        pseudo_elbow_offset_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         upper_1:
           Alpha: 1
           Show Axes: false
@@ -176,40 +179,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        virtual_end_effector_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_end_effector_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_end_effector_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_end_effector_offset:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        virtual_lower_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_lower_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        virtual_lower_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -217,19 +186,102 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: true
-      Marker Scale: 1
+        base:
+          Value: true
+        end_effector:
+          Value: true
+        lower_1_L_link:
+          Value: true
+        lower_1_L_link_end:
+          Value: true
+        lower_1_R_link:
+          Value: true
+        lower_1_R_link_end:
+          Value: true
+        lower_1_end:
+          Value: true
+        lower_1_parent:
+          Value: true
+        lower_1_root:
+          Value: true
+        lower_2_L_link:
+          Value: true
+        lower_2_L_link_end:
+          Value: true
+        lower_2_R_link:
+          Value: true
+        lower_2_R_link_end:
+          Value: true
+        lower_2_end:
+          Value: true
+        lower_2_parent:
+          Value: true
+        lower_2_root:
+          Value: true
+        lower_3_L_link:
+          Value: true
+        lower_3_L_link_end:
+          Value: true
+        lower_3_R_link:
+          Value: true
+        lower_3_R_link_end:
+          Value: true
+        lower_3_end:
+          Value: true
+        lower_3_parent:
+          Value: true
+        lower_3_root:
+          Value: true
+        upper_1:
+          Value: true
+        upper_2:
+          Value: true
+        upper_3:
+          Value: true
+      Marker Scale: 0.5
       Name: TF
-      Show Arrows: true
+      Show Arrows: false
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        base:
+          upper_1:
+            lower_1_parent:
+              lower_1_root:
+                lower_1_L_link:
+                  lower_1_L_link_end:
+                    lower_1_end:
+                      end_effector:
+                        {}
+                lower_1_R_link:
+                  lower_1_R_link_end:
+                    {}
+          upper_2:
+            lower_2_parent:
+              lower_2_root:
+                lower_2_L_link:
+                  lower_2_L_link_end:
+                    lower_2_end:
+                      {}
+                lower_2_R_link:
+                  lower_2_R_link_end:
+                    {}
+          upper_3:
+            lower_3_parent:
+              lower_3_root:
+                lower_3_L_link:
+                  lower_3_L_link_end:
+                    lower_3_end:
+                      {}
+                lower_3_R_link:
+                  lower_3_R_link_end:
+                    {}
       Update Interval: 0
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -258,25 +310,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.8318843841552734
+      Distance: 3.918215751647949
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.012451852671802044
-        Y: -0.05366440489888191
-        Z: -0.14512242376804352
+        X: -0.2882210910320282
+        Y: -0.1967451274394989
+        Z: -0.14565299451351166
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.060203101485967636
+      Pitch: 0.7252019643783569
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.090399980545044
+      Yaw: 0.4804179072380066
     Saved: ~
 Window Geometry:
   Displays:
