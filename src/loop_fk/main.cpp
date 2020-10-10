@@ -166,18 +166,6 @@ bool compute_fk(
     joint_values["lower_2_L_beta_top"] = beta[1];
     joint_values["lower_3_L_beta_top"] = beta[2];
 
-    joint_values["lower_1_L_beta_bot"] = -beta[0];
-    joint_values["lower_2_L_beta_bot"] = -beta[1];
-    joint_values["lower_3_L_beta_bot"] = -beta[2];
-
-    joint_values["lower_1_R_beta_top"] = beta[0];
-    joint_values["lower_2_R_beta_top"] = beta[1];
-    joint_values["lower_3_R_beta_top"] = beta[2];
-
-    joint_values["lower_1_R_beta_bot"] = -beta[0];
-    joint_values["lower_2_R_beta_bot"] = -beta[1];
-    joint_values["lower_3_R_beta_bot"] = -beta[2];
-
     joint_values["lower_1_L_gamma"] = alpha[0];
     joint_values["lower_2_L_gamma"] = alpha[1];
     joint_values["lower_3_L_gamma"] = alpha[2];
@@ -228,7 +216,6 @@ public:
         // Extract loops parameter
 
         std::map<std::string, std::string> loop_joints;
-        std::vector<std::unique_ptr<loop::Constraint>> loop_constraints;
 
         XmlRpc::XmlRpcValue loops;
         if (n.getParam("loops", loops)) {
@@ -264,8 +251,12 @@ public:
             joint_values[joint_state_msg_in.name[i]] = joint_state_msg_in.position[i];
         }
 
-        // Complete remaining joint values by satisfying constraints
+        // Delta FK in here for now
         compute_fk(dim, joint_values);
+
+        for (auto it = loop_constraints.cbegin(); it != loop_constraints.cend(); it++) {
+            (*it)->apply_fk(joint_values);
+        }
 
         for (std::size_t i = 0; i < joint_state_msg.name.size(); i++) {
             joint_state_msg.position[i] = joint_values[joint_state_msg.name[i]];
@@ -284,6 +275,7 @@ private:
 
     urdf::Model model;
     DeltaDimensions dim;
+    std::vector<std::unique_ptr<loop::Constraint>> loop_constraints;
 };
 
 int main(int argc, char **argv)

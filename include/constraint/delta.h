@@ -9,8 +9,8 @@ class Delta: public Constraint {
 public:
     Delta(const urdf::Model &model, const std::map<std::string, std::string> &joint_names);
     virtual ~Delta() {}
-    bool apply_fk(std::map<std::string, double> &positions);
-    bool apply_ik(const urdf::Pose &pose, std::map<std::string, double> &positions);
+    bool apply_fk(std::map<std::string, double> &positions)const;
+    bool apply_ik(const urdf::Pose &pose, std::map<std::string, double> &positions)const;
 private:
     // TODO
 };
