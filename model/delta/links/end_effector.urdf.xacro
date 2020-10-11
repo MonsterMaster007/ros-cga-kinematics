@@ -1,38 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
 
-<!-- ===== END EFFECTOR ===== -->
-
-<xacro:macro name="chain_end" params="number yaw">
-<joint name="lower_end_to_chain_end_${number}" type="fixed">
-    <origin
-        rpy="0 ${pi} ${yaw}"
-        xyz="${end_effector_radius} 0 0"
-    />
-    <parent link="lower_${number}_end"/>
-    <child link="chain_${number}_end"/>
-</joint>
-<link name="chain_${number}_end">
-<xacro:light_inertial/>
-</link>
-</xacro:macro>
-
-<xacro:chain_end number="1" yaw="0"/>
-<xacro:chain_end number="2" yaw="${pi*2/3}"/>
-<xacro:chain_end number="3" yaw="${pi*4/3}"/>
-
-<xacro:macro name="joint_chain_end_to_end_effector" params="number">
-<joint name="chain_${number}_end_to_end_effector" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="chain_${number}_end"/>
-    <child link="end_effector"/>
-</joint>
-</xacro:macro>
-
-<xacro:joint_chain_end_to_end_effector number="1"/>
-<xacro:joint_chain_end_to_end_effector number="2"/>
-<xacro:joint_chain_end_to_end_effector number="3"/>
-
 <link name="end_effector">
 <visual>
     <geometry>

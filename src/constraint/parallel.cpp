@@ -10,7 +10,6 @@ bool loop::Parallel::apply_fk(std::map<std::string, double> &positions)const
 {
     positions[joints.at("L_beta_bot")] = -positions[joints.at("L_beta_top")];
     positions[joints.at("R_beta_top")] = positions[joints.at("L_beta_top")];
-    positions[joints.at("R_beta_bot")] = -positions[joints.at("L_beta_top")];
     return true;
 }
 

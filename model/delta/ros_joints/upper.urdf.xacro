@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_parameters">
 
 
-<!-- ===== JOINTS ===== -->
+<!-- ===== THETA ===== -->
 
 <xacro:macro name="joint_theta" params="number yaw">
 <joint name="theta_${number}" type="revolute">
@@ -38,75 +38,8 @@
 <xacro:joint_theta number="3" yaw="${-pi*2/3}"/>
 
 
-<!-- ===== LINKS ===== -->
-
-<xacro:macro name="link_upper" params="number">
-<link name="upper_${number}">
-<xacro:cylinder_inertial
-    mass="${upper_mass}"
-    radius="${upper_radius}"
-    length="${upper_length}"
-    rpy="0 ${pi/2} 0"
-/>
-<visual>
-    <geometry>
-        <cylinder
-            length="${upper_length}"
-            radius="${upper_radius}"
-        />
-    </geometry>
-    <origin
-        xyz="${upper_length/2} 0 0"
-        rpy="0 ${pi/2} 0"
-    />
-    <material name="upper"/>
-</visual>
-<collision>
-    <geometry>
-        <cylinder
-            length="${upper_length}"
-            radius="${upper_radius}"
-        />
-    </geometry>
-    <origin
-        xyz="${upper_length/2} 0 0"
-        rpy="0 ${pi/2} 0"
-    />
-</collision>
-
-<visual>
-    <geometry>
-        <cylinder
-            length="${lower_width}"
-            radius="${upper_radius}"
-        />
-    </geometry>
-    <origin
-        xyz="${upper_length} 0 0"
-        rpy="${pi/2} 0 0"
-    />
-    <material name="upper"/>
-</visual>
-<collision>
-    <geometry>
-        <cylinder
-            length="${lower_width}"
-            radius="${upper_radius}"
-        />
-    </geometry>
-    <origin
-        xyz="${upper_length} 0 0"
-        rpy="${pi/2} 0 0"
-    />
-</collision>
-</link>
-</xacro:macro>
-
-<xacro:link_upper number="1"/>
-<xacro:link_upper number="2"/>
-<xacro:link_upper number="3"/>
-
-<!-- ===== PARALLEL LINKAGE PARENT LINKS ===== -->
+<!-- ===== JOINT AND VIRTUAL LINK FOR ROOT OF
+           LOWER PARALLEL LINKAGE             ===== -->
 
 <xacro:macro name="parallel_parent" params="parent length child">
 <joint name="${parent}_to_${child}_parent" type="fixed">
@@ -118,7 +51,6 @@
     <child link="${child}_parent"/>
 </joint>
 <link name="${child}_parent">
-    <xacro:light_inertial/>
 </link>
 </xacro:macro>
 

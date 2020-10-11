@@ -16,17 +16,4 @@ such that Z is aligned with the axis of the cylinder-->
 </inertial>
 </xacro:macro>
 
-<!-- Not allowed to have links with zero mass, so put an inertial
-element with very low mass and inertia
-Should replace the two revolute joints + virtual link, with
-a revolute2 joint for gazebo
--->
-<xacro:macro name="light_inertial">
-<inertial>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <mass value="0.1"/>
-    <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/>
-</inertial>
-</xacro:macro>
-
 </robot>

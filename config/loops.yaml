@@ -28,7 +28,6 @@ loops:
           L_beta_bot: lower_1_L_beta_bot
           L_gamma: lower_1_L_gamma
           R_beta_top: lower_1_R_beta_top
-          R_beta_bot: lower_1_R_beta_bot
 
     - class: parallel
       joints:
@@ -37,7 +36,6 @@ loops:
           L_beta_bot: lower_2_L_beta_bot
           L_gamma: lower_2_L_gamma
           R_beta_top: lower_2_R_beta_top
-          R_beta_bot: lower_2_R_beta_bot
 
     - class: parallel
       joints:
@@ -46,4 +44,3 @@ loops:
           L_beta_bot: lower_3_L_beta_bot
           L_gamma: lower_3_L_gamma
           R_beta_top: lower_3_R_beta_top
-          R_beta_bot: lower_3_R_beta_bot

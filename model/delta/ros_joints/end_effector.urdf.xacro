@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
+
+<joint name="chain_1_end_to_end_effector" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="chain_1_end"/>
+    <child link="end_effector"/>
+</joint>
+
+</robot>

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
+
+
+<xacro:macro name="joints_lower" params="number">
+
+<joint name="lower_${number}_alpha" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
+    <origin
+        rpy="0 0 0"
+        xyz="0 0 0"
+    />
+    <parent link="lower_${number}_parent"/>
+    <child link="lower_${number}_root"/>
+</joint>
+
+<!-- Virtual link -->
+<link name="lower_${number}_root">
+</link>
+
+<joint name="lower_${number}_L_beta_top" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
+    <origin
+        rpy="0 0 0"
+        xyz="0 ${lower_width/2} 0"
+    />
+    <parent link="lower_${number}_root"/>
+    <child link="lower_${number}_L_link"/>
+</joint>
+
+<joint name="lower_${number}_L_beta_bot" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
+    <origin
+        rpy="0 0 0"
+        xyz="${lower_length} 0 0"
+    />
+    <parent link="lower_${number}_L_link"/>
+    <child link="lower_${number}_L_link_end"/>
+</joint>
+
+<!-- Virtual link -->
+<link name="lower_${number}_L_link_end">
+</link>
+
+<joint name="lower_${number}_L_gamma" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
+    <origin
+        rpy="0 0 0"
+        xyz="0 ${-lower_width/2} 0"
+    />
+    <parent link="lower_${number}_L_link_end"/>
+    <child link="lower_${number}_end"/>
+</joint>
+
+<!-- Virtual link -->
+<link name="lower_${number}_end">
+</link>
+
+<joint name="lower_end_to_chain_end_${number}" type="fixed">
+    <origin
+        rpy="0 ${pi} ${number * pi * 2/3}"
+        xyz="${end_effector_radius} 0 0"
+    />
+    <parent link="lower_${number}_end"/>
+    <child link="chain_${number}_end"/>
+</joint>
+
+<joint name="lower_${number}_R_beta_top" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
+    <origin
+        rpy="0 0 0"
+        xyz="0 ${-lower_width/2} 0"
+    />
+    <parent link="lower_${number}_root"/>
+    <child link="lower_${number}_R_link"/>
+</joint>
+
+<!-- Virtual link -->
+<link name="chain_${number}_end">
+</link>
+
+</xacro:macro>
+
+<xacro:joints_lower number="1"/>
+<xacro:joints_lower number="2"/>
+<xacro:joints_lower number="3"/>
+
+</robot>

@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
+
+<!-- ===== LOWER TOP ===== -->
+
+<xacro:macro name="link_lower" params="number">
+
+<link name="lower_${number}_L_link">
+<xacro:cylinder_inertial
+    mass="${lower_mass}"
+    radius="${lower_radius}"
+    length="${lower_length}"
+    rpy="0 ${pi/2} 0"
+/>
+<visual>
+    <geometry>
+        <cylinder
+            length="${lower_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_length/2} 0 0"
+    />
+    <material name="lower"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${lower_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_length/2} 0 0"
+    />
+</collision>
+</link>
+
+<link name="lower_${number}_R_link">
+<xacro:cylinder_inertial
+    mass="${lower_mass}"
+    radius="${lower_radius}"
+    length="${lower_length}"
+    rpy="0 ${pi/2} 0"
+/>
+<visual>
+    <geometry>
+        <cylinder
+            length="${lower_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_length/2} 0 0"
+    />
+    <material name="lower"/>
+</visual>
+<collision>
+    <geometry>
+        <cylinder
+            length="${lower_length}"
+            radius="${lower_radius}"
+        />
+    </geometry>
+    <origin
+        rpy="0 ${pi/2} 0"
+        xyz="${lower_length/2} 0 0"
+    />
+</collision>
+</link>
+
+</xacro:macro>
+
+<xacro:link_lower number="1"/>
+<xacro:link_lower number="2"/>
+<xacro:link_lower number="3"/>
+
+</robot>
