@@ -21,29 +21,20 @@
     <child link="upper_${number}"/>
 </joint>
 
+<transmission name="theta_${number}_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="theta_${number}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="theta_${number}_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+</transmission>
+</xacro:macro>
+
 <xacro:joint_theta number="1" yaw="0"/>
 <xacro:joint_theta number="2" yaw="${pi*2/3}"/>
 <xacro:joint_theta number="3" yaw="${-pi*2/3}"/>
-
-
-<!-- ===== JOINT AND VIRTUAL LINK FOR ROOT OF
-           LOWER PARALLEL LINKAGE             ===== -->
-
-<xacro:macro name="parallel_parent" params="parent length child">
-<joint name="${parent}_to_${child}_parent" type="fixed">
-    <origin
-        rpy="0 0 0"
-        xyz="${length} 0 0"
-    />
-    <parent link="${parent}"/>
-    <child link="${child}_parent"/>
-</joint>
-<link name="${child}_parent">
-</link>
-</xacro:macro>
-
-<xacro:parallel_parent parent="upper_1" length="${upper_length}" child="lower_1"/>
-<xacro:parallel_parent parent="upper_2" length="${upper_length}" child="lower_2"/>
-<xacro:parallel_parent parent="upper_3" length="${upper_length}" child="lower_3"/>
 
 </robot>

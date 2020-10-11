@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
+
+<xacro:macro name="joints_end_effector" params="number">
+
+<joint name="lower_L_to_end_effector_${number}" type="fixed">
+    <origin
+        xyz="${end_effector_radius} ${-lower_width/2} 0"
+        rpy="0 ${pi} ${-number * pi * 2/3}"/>
+    <parent link="lower_${number}_L_end"/>
+    <child link="end_effector"/>
+</joint>
+
+<joint name="lower_R_to_end_effector_${number}" type="fixed">
+    <origin
+        xyz="${end_effector_radius} ${lower_width/2} 0"
+        rpy="0 ${pi} ${-number * pi * 2/3}"/>
+    <parent link="lower_${number}_L_end"/>
+    <child link="end_effector"/>
+</joint>
+
+</xacro:macro>
+
+</robot>
