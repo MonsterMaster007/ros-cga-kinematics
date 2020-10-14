@@ -1,0 +1,14 @@
+<launch>
+    <rosparam
+        file="$(find cga_kinematics)/config/controllers.yaml"
+        command="load"
+    />
+
+    <node
+        name="controller_spawner"
+        pkg="controller_manager"
+        type="spawner"
+        respawn="false"
+        args="theta_1_controller theta_2_controller theta_3_controller joint_state_controller"
+    />
+</launch>

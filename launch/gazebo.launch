@@ -1,29 +1,8 @@
 <launch>
-    <param name="robot_description_gazebo"
-        command="xacro '$(find cga_kinematics)/model/delta/gazebo.sdf.xacro'"/>
-
-    <rosparam
-        file="$(find cga_kinematics)/config/controllers.yaml"
-        command="load"
-    />
-
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg
             name="world_name"
             value="$(find cga_kinematics)/worlds/default.world"
         />
     </include>
-    <node
-        name="spawn_model"
-        pkg="gazebo_ros"
-        type="spawn_model"
-        args="-param robot_description_gazebo -sdf -x 0 -y 0 -z 0 -model delta"
-    />
-    <node
-        name="controller_spawner"
-        pkg="controller_manager"
-        type="spawner"
-        respawn="false"
-        args="theta_1_controller theta_2_controller theta_3_controller joint_state_controller"
-    />
 </launch>

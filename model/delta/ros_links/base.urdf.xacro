@@ -9,10 +9,6 @@
 </joint>
 
 <link name="base">
-<xacro:cylinder_inertial
-    mass="${base_mass}" radius="${base_radius}" length="${base_depth}"
-    rpy="0 0 0"
-/>
 <visual>
     <geometry>
         <cylinder

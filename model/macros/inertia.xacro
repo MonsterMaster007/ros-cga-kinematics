@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_parameters">
+
+<xacro:macro name="cylinder_inertia_urdf" params="mass radius length">
+<inertia
+    ixx="${mass*(radius**2/4 + length**2/12)}"
+    iyy="${mass*(radius**2/4 + length**2/12)}"
+    izz="${mass*(radius**2/2)}"
+    ixy="0" ixz="0" iyz="0"
+/>
+</xacro:macro>
+
+<xacro:macro name="cylinder_inertia_sdf" params="mass radius length">
+<inertia>
+    <ixx>${mass*(radius**2/4 + length**2/12)}</ixx>
+    <iyy>${mass*(radius**2/4 + length**2/12)}</iyy>
+    <izz>${mass*(radius**2/2)}</izz>
+    <ixy>0</ixy> <ixz>0</ixz> <iyz>0</iyz>
+</inertia>
+</xacro:macro>
+
+</robot>

@@ -1,0 +1,11 @@
+<launch>
+    <param name="robot_description_gazebo"
+        command="xacro '$(find cga_kinematics)/model/delta/gazebo.sdf.xacro'"/>
+
+    <node
+        name="spawn_model"
+        pkg="gazebo_ros"
+        type="spawn_model"
+        args="-param robot_description_gazebo -sdf -x 0 -y 0 -z 0 -model delta"
+    />
+</launch>

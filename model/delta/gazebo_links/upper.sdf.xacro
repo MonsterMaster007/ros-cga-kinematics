@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_parameters">
+
+<xacro:macro name="link_upper" params="number">
+<link name="upper_${number}">
+<inertial>
+    <mass>${upper_mass}</mass>
+    <pose>0 0 0 0 ${pi/2} 0</pose>
+    <xacro:cylinder_inertia_sdf
+        mass="${upper_mass}"
+        radius="${upper_radius}"
+        length="${upper_length}"
+    />
+</inertial>
+<visual name="visual">
+    <geometry>
+        <cylinder>
+            <length>${upper_length}</length>
+            <radius>${upper_radius}</radius>
+        </cylinder>
+    </geometry>
+    <pose>
+        ${upper_length/2} 0 0
+        0 ${pi/2} 0
+    </pose>
+</visual>
+<collision name="collision">
+    <geometry>
+        <cylinder>
+            <length>${upper_length}</length>
+            <radius>${upper_radius}</radius>
+        </cylinder>
+    </geometry>
+    <pose>
+        ${upper_length/2} 0 0
+        0 ${pi/2} 0
+    </pose>
+</collision>
+
+<visual name="visual">
+    <geometry>
+        <cylinder>
+            <length>${lower_width}</length>
+            <radius>${upper_radius}</radius>
+        </cylinder>
+    </geometry>
+    <pose>
+        ${upper_length} 0 0
+        ${pi/2} 0 0
+    </pose>
+</visual>
+<collision name="collision">
+    <geometry>
+        <cylinder>
+            length="${lower_width}"
+            radius="${upper_radius}"
+        </cylinder>
+    </geometry>
+    <pose>
+        ${upper_length} 0 0
+        ${pi/2} 0 0
+    </pose>
+</collision>
+</link>
+</xacro:macro>
+
+<xacro:link_upper number="1"/>
+<xacro:link_upper number="2"/>
+<xacro:link_upper number="3"/>
+
+</robot>

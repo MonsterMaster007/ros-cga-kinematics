@@ -6,31 +6,14 @@
 
 <xacro:macro name="joint_theta" params="number yaw">
 <joint name="theta_${number}" type="revolute">
-    <axis xyz="0 1 0"/>
-    <limit
-        effort="1000.0"
-        lower="${-pi/2}"
-        upper="${pi/2}"
-        velocity="0.5"
-    />
-    <origin
-        rpy="0 0 ${yaw}"
-        xyz="${cos(yaw)*base_radius} ${sin(yaw)*base_radius} 0"
-    />
-    <parent link="base"/>
-    <child link="upper_${number}"/>
+    <axis><xyz>0 1 0</xyz></axis>
+    <pose>
+        0 0 ${yaw}
+        ${cos(yaw)*base_radius} ${sin(yaw)*base_radius} 0
+    </pose>
+    <parent>base</parent>
+    <child>upper_${number}</child>
 </joint>
-
-<transmission name="theta_${number}_tran">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="theta_${number}">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="theta_${number}_motor">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-</transmission>
 </xacro:macro>
 
 <xacro:joint_theta number="1" yaw="0"/>
