@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <array>
+#include <numeric>
 
 #define PI 3.14159265358979323846
 
@@ -24,10 +25,10 @@ enum Basis {
 class CGA {
   public:
     CGA ()  {
-        std::fill(mvec, mvec + (size_t)Basis::COUNT, 0.0f );
+        std::fill(mvec, mvec + (size_t)Basis::COUNT, 0);
     }
     CGA (double f, int idx=0) {
-        std::fill(mvec, mvec + (size_t)Basis::COUNT, 0.0f );
+        std::fill(mvec, mvec + (size_t)Basis::COUNT, 0);
         mvec[idx] = f;
     }
     double& operator[](size_t index) {
@@ -674,7 +675,7 @@ inline CGA operator - (const double &a, const CGA &b) {
 inline CGA operator - (const CGA &a, const double &b) {
   CGA res;
     res[0] = a[0]-b;
-      res[1] = a[1];
+    res[1] = a[1];
     res[2] = a[2];
     res[3] = a[3];
     res[4] = a[4];
@@ -708,31 +709,34 @@ inline CGA operator - (const CGA &a, const double &b) {
   return res;
 };
 
-inline double CGA::norm() const { return sqrt(fabs(((*this)*Conjugate()).mvec[0])); }
+inline double CGA::norm() const {
+    // return sqrt(fabs(((*this)*Conjugate()).mvec[0]));
+    return sqrt(fabs(std::inner_product(mvec, mvec+32, mvec, (double)0)));
+}
 inline double CGA::inorm() const { return (!(*this)).norm(); }
 inline CGA CGA::normalized() const { return (*this) * (1/norm()); }
 
 
 // PGA is point based. Vectors are points.
-static CGA e1(1.0f,1), e2(1.0f,2), e3(1.0f,3), e4(1.0f,4), e5(1.0f,5);
+static CGA e1(1,1), e2(1,2), e3(1,3), e4(1,4), e5(1,5);
 
 // We seldomly work in the natural basis, but instead in a null basis
 // for this we create two null vectors 'origin' and 'infinity'
-static CGA ninf = e4+e5, n0 = 0.5f*(e5-e4);
+static CGA ninf = e4+e5, n0 = 0.5*(e5-e4);
 
 // create a point from x,y,z coordinates
 static CGA up(double x, double y, double z)
 {
   double d = x*x + y*y + z*z;
-  return x*e1 + y*e2 + z*e3 + 0.5f*d*ninf + n0;
+  return x*e1 + y*e2 + z*e3 + 0.5*d*ninf + n0;
 }
 
-static CGA I3(1.0f, E123);
-static CGA I5(1.0f, E12345);
+static CGA I3(1, E123);
+static CGA I5(1, E12345);
 
 static CGA up(const cga::CGA &mvec)
 {
-    return mvec + 0.5f*(mvec*mvec)*ninf + n0;
+    return mvec + 0.5*(mvec*mvec)*ninf + n0;
 }
 
 static const CGA down(const CGA &mvec)

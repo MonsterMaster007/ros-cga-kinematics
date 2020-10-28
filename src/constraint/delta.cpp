@@ -115,9 +115,6 @@ bool loop::Delta::apply_fk(std::map<std::string, double> &positions)const
     Y = -1 * (~P * (T|cga::ninf) * P);
     y = cga::down(Y);
 
-    // TODO: Check there is a possible solution
-    // If not, return false and don't update joint_values
-
     cga::CGA lower_disp;
     for (std::size_t i = 0; i < 3; i++) {
         lower_disp = y - a[i];

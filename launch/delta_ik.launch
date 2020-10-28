@@ -1,6 +1,6 @@
 <launch>
     <param name="robot_description"
-        command="xacro '$(find cga_kinematics)/model/delta.urdf.xacro'"/>
+        command="xacro '$(find cga_kinematics)/model/delta/ros.urdf.xacro'"/>
 
     <rosparam file="$(find cga_kinematics)/config/loops.yaml" />
 
