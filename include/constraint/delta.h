@@ -2,7 +2,7 @@
 #define CONSTRAINT_DELTA_H
 
 #include "constraint/constraint.h"
-#include "cga/cga.h"
+#include "cga/vector.h"
 
 namespace loop {
 
@@ -13,8 +13,8 @@ public:
     bool apply_fk(std::map<std::string, double> &positions)const;
     bool apply_ik(const geometry_msgs::Pose &pose, std::map<std::string, double> &positions)const;
 private:
-    std::vector<cga::CGA> s;
-    std::vector<cga::CGA> s_perp;
+    std::vector<cga::Vector> s;
+    std::vector<cga::Vector> s_perp;
     std::vector<double> base_radius;
     std::vector<double> ee_radius;
     std::vector<double> upper_length;
