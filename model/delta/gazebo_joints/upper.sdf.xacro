@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<to_include xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:macro name="joint_theta" params="number yaw">
+<joint name="theta_${number}" type="revolute">
+    <pose>0 0 0 0 0 0</pose>
+    <parent>base</parent>
+    <child>upper_${number}</child>
+    <axis>
+        <xyz>${-sin(yaw)} ${cos(yaw)} 0</xyz>
+        <limit>
+            <lower>${-pi/2}</lower>
+            <upper>${pi/2}</upper>
+        </limit>
+    </axis>
+</joint>
+<transmission name="theta_${number}_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="theta_${number}">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="theta_${number}">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+</transmission>
+</xacro:macro>
+
+<xacro:joint_theta number="1" yaw="0"/>
+<xacro:joint_theta number="2" yaw="${2*pi/3}"/>
+<xacro:joint_theta number="3" yaw="${-2*pi/3}"/>
+
+</to_include>

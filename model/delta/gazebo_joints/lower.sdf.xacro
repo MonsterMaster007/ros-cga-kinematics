@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
+
+
+<xacro:macro name="joints_lower" params="number">
+
+<joint name="lower_${number}_L_ball_top" type="ball">
+    <pose>0 0 0 0 0 0</pose>
+    <parent>upper_${number}</parent>
+    <child>lower_${number}_L_link</child>
+</joint>
+
+<joint name="lower_${number}_R_ball_top" type="ball">
+    <pose>0 0 0 0 0 0</pose>
+    <parent>upper_${number}</parent>
+    <child>lower_${number}_R_link</child>
+</joint>
+
+</xacro:macro>
+
+<xacro:joints_lower number="1"/>
+<xacro:joints_lower number="2"/>
+<xacro:joints_lower number="3"/>
+
+</robot>

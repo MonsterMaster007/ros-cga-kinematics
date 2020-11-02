@@ -3,80 +3,104 @@
 
 <!-- ===== LOWER TOP ===== -->
 
-<xacro:macro name="link_lower" params="number">
+<xacro:macro name="link_lower" params="number yaw">
 
 <link name="lower_${number}_L_link">
-<xacro:cylinder_inertial
-    mass="${lower_mass}"
-    radius="${lower_radius}"
-    length="${lower_length}"
-    rpy="0 ${pi/2} 0"
-/>
-<visual>
+<pose>
+    ${(base_radius + upper_length)*cos(yaw) - (lower_width/2)*sin(yaw)}
+    ${(base_radius + upper_length)*sin(yaw) + (lower_width/2)*cos(yaw)}
+    0
+    0 0 ${yaw}
+</pose>
+
+<visual name="lower_${number}_L_link_visual">
+    <pose>
+        ${lower_length/2} 0 0
+        0 ${pi/2} 0
+    </pose>
     <geometry>
-        <cylinder
-            length="${lower_length}"
-            radius="${lower_radius}"
-        />
+        <cylinder>
+            <length>${lower_length}</length>
+            <radius>${lower_radius}</radius>
+        </cylinder>
     </geometry>
-    <origin
-        rpy="0 ${pi/2} 0"
-        xyz="${lower_length/2} 0 0"
-    />
-    <material name="lower"/>
 </visual>
-<collision>
+
+<collision name="lower_${number}_L_link_collision">
+    <pose>
+        ${lower_length/2} 0 0
+        0 ${pi/2} 0
+    </pose>
     <geometry>
-        <cylinder
-            length="${lower_length}"
-            radius="${lower_radius}"
-        />
+        <cylinder>
+            <length>${lower_length}</length>
+            <radius>${lower_radius}</radius>
+        </cylinder>
     </geometry>
-    <origin
-        rpy="0 ${pi/2} 0"
-        xyz="${lower_length/2} 0 0"
-    />
 </collision>
+
+<inertial>
+    <mass>${lower_mass}</mass>
+    <pose>${lower_length/2} 0 0 0 ${pi/2} 0</pose>
+    <xacro:cylinder_inertia_sdf
+        mass="${lower_mass}"
+        radius="${lower_radius}"
+        length="${lower_length}"
+    />
+</inertial>
+
 </link>
 
 <link name="lower_${number}_R_link">
-<xacro:cylinder_inertial
-    mass="${lower_mass}"
-    radius="${lower_radius}"
-    length="${lower_length}"
-    rpy="0 ${pi/2} 0"
-/>
-<visual>
+<pose>
+    ${(base_radius + upper_length)*cos(yaw) + (lower_width/2)*sin(yaw)}
+    ${(base_radius + upper_length)*sin(yaw) - (lower_width/2)*cos(yaw)}
+    0
+    0 0 ${yaw}
+</pose>
+
+<visual name="lower_${number}_R_link_visual">
+    <pose>
+        ${lower_length/2} 0 0
+        0 ${pi/2} 0
+    </pose>
     <geometry>
-        <cylinder
-            length="${lower_length}"
-            radius="${lower_radius}"
-        />
+        <cylinder>
+            <length>${lower_length}</length>
+            <radius>${lower_radius}</radius>
+        </cylinder>
     </geometry>
-    <origin
-        rpy="0 ${pi/2} 0"
-        xyz="${lower_length/2} 0 0"
-    />
-    <material name="lower"/>
 </visual>
-<collision>
+
+<collision name="lower_${number}_R_link_collision">
+    <pose>
+        ${lower_length/2} 0 0
+        0 ${pi/2} 0
+    </pose>
     <geometry>
-        <cylinder
-            length="${lower_length}"
-            radius="${lower_radius}"
-        />
+        <cylinder>
+            <length>${lower_length}</length>
+            <radius>${lower_radius}</radius>
+        </cylinder>
     </geometry>
-    <origin
-        rpy="0 ${pi/2} 0"
-        xyz="${lower_length/2} 0 0"
-    />
 </collision>
+
+<inertial>
+    <mass>${lower_mass}</mass>
+    <pose>${lower_length/2} 0 0 0 ${pi/2} 0</pose>
+    <xacro:cylinder_inertia_sdf
+        mass="${lower_mass}"
+        radius="${lower_radius}"
+        length="${lower_length}"
+    />
+</inertial>
+
 </link>
 
 </xacro:macro>
 
-<xacro:link_lower number="1"/>
-<xacro:link_lower number="2"/>
-<xacro:link_lower number="3"/>
+<xacro:link_lower number="1" yaw="0"/>
+<xacro:link_lower number="2" yaw="${2*pi/3}"/>
+<xacro:link_lower number="3" yaw="${-2*pi/3}"/>
 
 </robot>

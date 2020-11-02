@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_parameters">
 
 <xacro:property name="base_radius" value="0.3"/>
-<xacro:property name="base_depth" value="0.02"/>
+<xacro:property name="base_depth" value="0.05"/>
 
 <xacro:property name="upper_length" value="0.3"/>
 <xacro:property name="upper_radius" value="0.01"/>
