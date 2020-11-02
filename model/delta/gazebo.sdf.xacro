@@ -9,17 +9,11 @@
 <xacro:include filename="gazebo_links/base.sdf.xacro"/>
 <xacro:include filename="gazebo_links/upper.sdf.xacro"/>
 <xacro:include filename="gazebo_links/lower.sdf.xacro"/>
-<!--
 <xacro:include filename="gazebo_links/end_effector.sdf.xacro"/>
--->
 
 <xacro:include filename="gazebo_joints/upper.sdf.xacro"/>
 <xacro:include filename="gazebo_joints/lower.sdf.xacro"/>
-<!--
-<xacro:include filename="gazebo_joints/end_effector.urdf.xacro"/>
-
-<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
--->
+<xacro:include filename="gazebo_joints/end_effector.sdf.xacro"/>
 
 <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
 

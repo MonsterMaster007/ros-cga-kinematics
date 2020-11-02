@@ -4,7 +4,7 @@
 <xacro:macro name="link_upper" params="number yaw">
 <link name="upper_${number}">
 <pose>
-    ${base_radius*cos(yaw)} ${base_radius*sin(yaw)} 0
+    ${base_radius*cos(yaw)} ${base_radius*sin(yaw)} ${base_height}
     0 0 ${yaw}
 </pose>
 
@@ -62,7 +62,17 @@
 
 <inertial>
     <mass>${upper_mass}</mass>
-    <pose>0 0 ${upper_length/2} 0 0 0</pose>
+    <pose>${upper_length/2} 0 0 0 ${pi/2} 0</pose>
+    <xacro:cylinder_inertia_sdf
+        mass="${upper_mass}"
+        radius="${upper_radius}"
+        length="${upper_length}"
+    />
+</inertial>
+
+<inertial>
+    <mass>${upper_mass}</mass>
+    <pose>${upper_length} 0 0 ${pi/2} 0 0</pose>
     <xacro:cylinder_inertia_sdf
         mass="${upper_mass}"
         radius="${upper_radius}"

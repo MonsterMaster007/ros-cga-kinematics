@@ -2,7 +2,7 @@
 <sdf xmlns:xacro="http://www.ros.org/wiki/xacro" name="base">
 
 <link name="base">
-<pose> 0 0 0 0 0 0</pose>
+<pose> 0 0 ${base_height} 0 0 0</pose>
 
 <visual name="base_visual">
     <geometry>

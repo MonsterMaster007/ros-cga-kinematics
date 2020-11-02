@@ -9,8 +9,8 @@
 <pose>
     ${(base_radius + upper_length)*cos(yaw) - (lower_width/2)*sin(yaw)}
     ${(base_radius + upper_length)*sin(yaw) + (lower_width/2)*cos(yaw)}
-    0
-    0 0 ${yaw}
+    ${base_height}
+    0 ${pi - lower_inclination} ${yaw}
 </pose>
 
 <visual name="lower_${number}_L_link_visual">
@@ -55,8 +55,8 @@
 <pose>
     ${(base_radius + upper_length)*cos(yaw) + (lower_width/2)*sin(yaw)}
     ${(base_radius + upper_length)*sin(yaw) - (lower_width/2)*cos(yaw)}
-    0
-    0 0 ${yaw}
+    ${base_height}
+    0 ${pi - lower_inclination} ${yaw}
 </pose>
 
 <visual name="lower_${number}_R_link_visual">

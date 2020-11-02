@@ -1,24 +1,34 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
 
-<xacro:macro name="joints_end_effector" params="number">
+<xacro:macro name="joints_end_effector" params="number yaw">
 
-<joint name="lower_L_to_end_effector_${number}" type="fixed">
-    <origin
-        xyz="${end_effector_radius} ${-lower_width/2} 0"
-        rpy="0 ${pi} ${-number * pi * 2/3}"/>
-    <parent link="lower_${number}_L_end"/>
-    <child link="end_effector"/>
+<joint name="lower_${number}_L_ball_bot" type="ball">
+    <pose>
+        ${end_effector_radius*cos(yaw) - (lower_width/2)*sin(yaw)}
+        ${end_effector_radius*sin(yaw) + (lower_width/2)*cos(yaw)}
+        0
+        0 0 ${yaw}
+    </pose>
+    <parent>lower_${number}_L_link</parent>
+    <child>end_effector</child>
 </joint>
 
-<joint name="lower_R_to_end_effector_${number}" type="fixed">
-    <origin
-        xyz="${end_effector_radius} ${lower_width/2} 0"
-        rpy="0 ${pi} ${-number * pi * 2/3}"/>
-    <parent link="lower_${number}_L_end"/>
-    <child link="end_effector"/>
+<joint name="lower_${number}_R_ball_bot" type="ball">
+    <pose>
+        ${end_effector_radius*cos(yaw) + (lower_width/2)*sin(yaw)}
+        ${end_effector_radius*sin(yaw) - (lower_width/2)*cos(yaw)}
+        0
+        0 0 ${yaw}
+    </pose>
+    <parent>lower_${number}_R_link</parent>
+    <child>end_effector</child>
 </joint>
 
 </xacro:macro>
+
+<xacro:joints_end_effector number="1" yaw="0"/>
+<xacro:joints_end_effector number="2" yaw="${2*pi/3}"/>
+<xacro:joints_end_effector number="3" yaw="${-2*pi/3}"/>
 
 </robot>

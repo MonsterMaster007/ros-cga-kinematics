@@ -1,68 +1,72 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta">
 
+<xacro:macro name="end_effector_attachment" params="number yaw">
+<visual name="end_effector_attachment_${number}_visual">
+    <pose>
+        ${end_effector_radius*cos(yaw)}
+        ${end_effector_radius*sin(yaw)}
+        0
+        0 ${pi/2} ${yaw + pi/2}
+    </pose>
+    <geometry>
+        <cylinder>
+            <length>${lower_width}</length>
+            <radius>${end_effector_depth/2}</radius>
+        </cylinder>
+    </geometry>
+</visual>
+<collision name="end_effector_attachment_${number}_collision">
+    <pose>
+        ${end_effector_radius*cos(yaw)}
+        ${end_effector_radius*sin(yaw)}
+        0
+        0 ${pi/2} ${yaw + pi/2}
+    </pose>
+    <geometry>
+        <cylinder>
+            <length>${lower_width}</length>
+            <radius>${end_effector_depth/2}</radius>
+        </cylinder>
+    </geometry>
+</collision>
+</xacro:macro>
+
 <link name="end_effector">
-<visual>
+<pose> 0 0 0 0 0 0</pose>
+
+<visual name="end_effector_visual">
+    <pose>0 0 0 0 0 0</pose>
     <geometry>
-        <cylinder
-            length="${end_effector_depth}"
-            radius="${end_effector_radius}"
-        />
+        <cylinder>
+            <length>${end_effector_depth}</length>
+            <radius>${end_effector_radius}</radius>
+        </cylinder>
     </geometry>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <material name="end_effector"/>
 </visual>
-<collision>
+
+<collision name="end_effector_collision">
+    <pose>0 0 0 0 0 0</pose>
     <geometry>
-        <cylinder
-            length="${end_effector_depth}"
-            radius="${end_effector_radius}"
-        />
+        <cylinder>
+            <length>${end_effector_depth}</length>
+            <radius>${end_effector_radius}</radius>
+        </cylinder>
     </geometry>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
 </collision>
 
-<visual>
-    <geometry>
-        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
-    </geometry>
-    <origin xyz="${end_effector_radius} 0 0" rpy="0 ${pi/2} ${pi/2}" />
-    <material name="end_effector"/>
-</visual>
-<collision>
-    <geometry>
-        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
-    </geometry>
-    <origin xyz="${end_effector_radius} 0 0" rpy="0 ${pi/2} ${pi/2}" />
-</collision>
+<xacro:end_effector_attachment number="1" yaw="0"/>
+<xacro:end_effector_attachment number="2" yaw="${2*pi/3}"/>
+<xacro:end_effector_attachment number="3" yaw="${-2*pi/3}"/>
 
-<visual>
-    <geometry>
-        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
-    </geometry>
-    <origin xyz="${cos(pi*2/3)*end_effector_radius} ${sin(pi*2/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*7/6}" />
-    <material name="end_effector"/>
-</visual>
-<collision>
-    <geometry>
-        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
-    </geometry>
-    <origin xyz="${cos(pi*2/3)*end_effector_radius} ${sin(pi*2/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*7/6}" />
-</collision>
-
-<visual>
-    <geometry>
-        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
-    </geometry>
-    <origin xyz="${cos(pi*4/3)*end_effector_radius} ${sin(pi*4/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*11/6}" />
-    <material name="end_effector"/>
-</visual>
-<collision>
-    <geometry>
-        <cylinder length="${lower_width}" radius="${end_effector_depth/2}" />
-    </geometry>
-    <origin xyz="${cos(pi*4/3)*end_effector_radius} ${sin(pi*4/3)*end_effector_radius} 0" rpy="0 ${pi/2} ${pi*11/6}" />
-</collision>
+<inertial>
+    <mass>${end_effector_mass}</mass>
+    <xacro:cylinder_inertia_sdf
+        mass="${end_effector_mass}"
+        radius="${end_effector_radius}"
+        length="${end_effector_depth}"
+    />
+</inertial>
 
 </link>
 
