@@ -33,7 +33,7 @@
 </xacro:macro>
 
 <link name="end_effector">
-<pose> 0 0 0 0 0 0</pose>
+<pose> 0 0 ${end_effector_height} 0 0 0</pose>
 
 <visual name="end_effector_visual">
     <pose>0 0 0 0 0 0</pose>

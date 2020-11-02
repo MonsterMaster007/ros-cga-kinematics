@@ -19,4 +19,13 @@
 </inertia>
 </xacro:macro>
 
+<xacro:macro name="box_inertia_sdf" params="mass w h d">
+<inertia>
+    <ixx>${mass*(h**2 + d**2)/12}</ixx>
+    <iyy>${mass*(w**2 + d**2)/12}</iyy>
+    <izz>${mass*(w**2 + h**2)/12}</izz>
+    <ixy>0</ixy> <ixz>0</ixz> <iyz>0</iyz>
+</inertia>
+</xacro:macro>
+
 </robot>

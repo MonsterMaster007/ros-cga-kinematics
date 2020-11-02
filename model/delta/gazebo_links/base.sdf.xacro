@@ -1,8 +1,92 @@
 <?xml version="1.0"?>
 <sdf xmlns:xacro="http://www.ros.org/wiki/xacro" name="base">
 
+<xacro:macro name="stand_part" params="number yaw">
+
+<visual name="stand_leg_${number}_visual">
+    <pose>
+        ${stand_radius*cos(yaw)}
+        ${stand_radius*sin(yaw)}
+        ${-stand_height/2}
+        0 0 ${yaw}
+    </pose>
+    <geometry><box><size>
+                ${stand_leg_size}
+                ${stand_leg_size}
+                ${stand_height}
+    </size></box></geometry>
+</visual>
+<collision name="stand_leg_${number}_collision">
+    <pose>
+        ${stand_radius*cos(yaw)}
+        ${stand_radius*sin(yaw)}
+        ${-stand_height/2}
+        0 0 ${yaw}
+    </pose>
+    <geometry><box><size>
+        ${stand_leg_size}
+        ${stand_leg_size}
+        ${-stand_height}
+    </size></box></geometry>
+</collision>
+<inertial>
+    <pose>
+        ${stand_radius*cos(yaw)} ${stand_radius*sin(yaw)} ${-stand_height/2}
+        0 0 {yaw}
+    </pose>
+    <xacro:box_inertia_sdf
+        mass="${stand_mass}"
+        w="${stand_leg_size}"
+        h="${stand_leg_size}"
+        d="${stand_height}"
+    />
+</inertial>
+
+<visual name="stand_top_${number}_visual">
+    <pose>
+        ${0.5*(stand_radius+base_radius)*cos(yaw)}
+        ${0.5*(stand_radius+base_radius)*sin(yaw)}
+        0
+        0 0 ${yaw}
+    </pose>
+    <geometry><box><size>
+        ${stand_radius - base_radius}
+        ${stand_leg_size}
+        ${stand_leg_size}
+    </size></box></geometry>
+</visual>
+<collision name="stand_leg_base_${number}_collision">
+    <pose>
+        ${0.5*(stand_radius+base_radius)*cos(yaw)}
+        ${0.5*(stand_radius+base_radius)*sin(yaw)}
+        0
+        0 0 ${yaw}
+    </pose>
+    <geometry><box><size>
+        ${stand_radius - base_radius}
+        ${stand_leg_size}
+        ${stand_leg_size}
+    </size></box></geometry>
+</collision>
+<inertial>
+    <pose>
+        ${0.5*(stand_radius+base_radius)*cos(yaw)}
+        ${0.5*(stand_radius+base_radius)*sin(yaw)}
+        0
+        0 0 ${yaw}
+    </pose>
+    <xacro:box_inertia_sdf
+        mass="${stand_mass}"
+        w="${stand_radius - base_radius}"
+        h="${stand_leg_size}"
+        d="${stand_leg_size}"
+    />
+</inertial>
+
+</xacro:macro>
+
 <link name="base">
-<pose> 0 0 ${base_height} 0 0 0</pose>
+<pose> 0 0 ${stand_height} 0 0 0</pose>
 
 <visual name="base_visual">
     <geometry>
@@ -30,6 +114,10 @@
         length="${base_depth}"
     />
 </inertial>
+
+<xacro:stand_part number="1" yaw="${pi/3}"/>
+<xacro:stand_part number="2" yaw="${pi}"/>
+<xacro:stand_part number="3" yaw="${-pi/3}"/>
 
 </link>
 

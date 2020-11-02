@@ -21,8 +21,14 @@
 
 <xacro:property name="break_indicator_radius" value="0.03"/>
 
-<xacro:property name="base_height"
-    value="${sqrt(lower_length**2 - (upper_length+base_radius-end_effector_radius)**2)}"
+<xacro:property name="stand_height" value="0.9"/>
+<xacro:property name="stand_radius" value="0.8"/>
+<xacro:property name="stand_leg_size" value="0.05"/>
+<xacro:property name="stand_mass" value="0.1"/>
+<xacro:property name="stand_base_mass" value="1"/>
+
+<xacro:property name="end_effector_height"
+    value="${stand_height - sqrt(lower_length**2 - (upper_length+base_radius-end_effector_radius)**2)}"
 />
 <xacro:property name="lower_inclination"
     value="${acos((upper_length+base_radius-end_effector_radius)/lower_length)}"
