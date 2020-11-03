@@ -1,7 +1,23 @@
 <?xml version='1.0'?>
 <sdf version='1.4' xmlns:xacro="http://www.ros.org/wiki/xacro">
 <model name="delta">
-<static>false</static>
+<selfCollide>true</selfCollide>
+
+<joint name="world_fix" type="fixed">
+    <pose>0 0 0 0 0 0</pose>
+    <parent>world</parent>
+    <child>base</child>
+</joint>
+<physics>
+    <ode>
+        <island_threads>
+            3
+        </island_threads>
+        <solver>
+            <iters>50</iters>
+        </solver>
+    </ode>
+</physics>
 
 <xacro:include filename="parameters.xacro"/>
 <xacro:include filename="../macros/inertia.xacro"/>

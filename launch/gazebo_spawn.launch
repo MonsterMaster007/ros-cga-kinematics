@@ -10,4 +10,5 @@
         type="spawn_model"
         args="-param robot_description_sdf -sdf -x 0 -y 0 -z 0 -model delta -b"
     />
+
 </launch>

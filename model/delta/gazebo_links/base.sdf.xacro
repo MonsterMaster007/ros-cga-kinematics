@@ -3,7 +3,7 @@
 
 <xacro:macro name="stand_part" params="number yaw">
 
-<visual name="stand_leg_${number}_visual">
+<visual name="stand_leg_${number}_visual_1">
     <pose>
         ${stand_radius*cos(yaw)}
         ${stand_radius*sin(yaw)}
@@ -11,12 +11,10 @@
         0 0 ${yaw}
     </pose>
     <geometry><box><size>
-                ${stand_leg_size}
-                ${stand_leg_size}
-                ${stand_height}
+        ${stand_leg_depth} ${stand_leg_width} ${stand_height}
     </size></box></geometry>
 </visual>
-<collision name="stand_leg_${number}_collision">
+<collision name="stand_leg_${number}_collision_1">
     <pose>
         ${stand_radius*cos(yaw)}
         ${stand_radius*sin(yaw)}
@@ -24,9 +22,7 @@
         0 0 ${yaw}
     </pose>
     <geometry><box><size>
-        ${stand_leg_size}
-        ${stand_leg_size}
-        ${-stand_height}
+        ${stand_leg_depth} ${stand_leg_depth} ${-stand_height}
     </size></box></geometry>
 </collision>
 <inertial>
@@ -35,14 +31,59 @@
         0 0 {yaw}
     </pose>
     <xacro:box_inertia_sdf
-        mass="${stand_mass}"
-        w="${stand_leg_size}"
-        h="${stand_leg_size}"
-        d="${stand_height}"
+        mass="${stand_vertical_mass}"
+        w="${stand_leg_depth}" h="${stand_leg_width}" d="${stand_height}"
     />
 </inertial>
 
-<visual name="stand_top_${number}_visual">
+<visual name="stand_leg_${number}_visual_2">
+    <pose>
+        ${stand_radius*cos(yaw)}
+        ${stand_radius*sin(yaw)}
+        ${-stand_height + stand_base_height/2}
+        0 0 ${yaw}
+    </pose>
+    <geometry>
+        <cylinder>
+            <length>${stand_base_height}</length>
+            <radius>${stand_base_radius}</radius>
+        </cylinder>
+    </geometry>
+</visual>
+<collision name="stand_leg_${number}_collision_2">
+    <pose>
+        ${stand_radius*cos(yaw)}
+        ${stand_radius*sin(yaw)}
+        ${-stand_height + stand_base_height/2}
+        0 0 ${yaw}
+    </pose>
+    <geometry>
+        <cylinder>
+            <length>${stand_base_height}</length>
+            <radius>${stand_base_radius}</radius>
+        </cylinder>
+    </geometry>
+    <surface>
+        <ode>
+            <mu>10</mu>
+            <mu2>10</mu2>
+            <slip>0</slip>
+            <slip2>0</slip2>
+        </ode>
+    </surface>
+</collision>
+<inertial>
+    <pose>
+        ${stand_radius*cos(yaw)} ${stand_radius*sin(yaw)} ${-stand_height+stand_base_height/2}
+        0 0 {yaw}
+    </pose>
+    <mass>${base_mass}</mass>
+    <xacro:cylinder_inertia_sdf
+        mass="${stand_base_mass}" radius="${stand_base_radius}" length="${stand_base_height}"
+    />
+</inertial>
+
+<visual name="stand_top_${number}_visual_3">
     <pose>
         ${0.5*(stand_radius+base_radius)*cos(yaw)}
         ${0.5*(stand_radius+base_radius)*sin(yaw)}
@@ -51,11 +92,11 @@
     </pose>
     <geometry><box><size>
         ${stand_radius - base_radius}
-        ${stand_leg_size}
-        ${stand_leg_size}
+        ${stand_leg_width}
+        ${stand_leg_depth}
     </size></box></geometry>
 </visual>
-<collision name="stand_leg_base_${number}_collision">
+<collision name="stand_leg_base_${number}_collision_3">
     <pose>
         ${0.5*(stand_radius+base_radius)*cos(yaw)}
         ${0.5*(stand_radius+base_radius)*sin(yaw)}
@@ -64,8 +105,8 @@
     </pose>
     <geometry><box><size>
         ${stand_radius - base_radius}
-        ${stand_leg_size}
-        ${stand_leg_size}
+        ${stand_leg_width}
+        ${stand_leg_depth}
     </size></box></geometry>
 </collision>
 <inertial>
@@ -76,10 +117,10 @@
         0 0 ${yaw}
     </pose>
     <xacro:box_inertia_sdf
-        mass="${stand_mass}"
+        mass="${stand_horizontal_mass}"
         w="${stand_radius - base_radius}"
-        h="${stand_leg_size}"
-        d="${stand_leg_size}"
+        h="${stand_leg_width}"
+        d="${stand_leg_depth}"
     />
 </inertial>
 
@@ -106,6 +147,7 @@
     </geometry>
 </collision>
 
+<!--
 <inertial>
     <mass>${base_mass}</mass>
     <xacro:cylinder_inertia_sdf
@@ -118,6 +160,7 @@
 <xacro:stand_part number="1" yaw="${pi/3}"/>
 <xacro:stand_part number="2" yaw="${pi}"/>
 <xacro:stand_part number="3" yaw="${-pi/3}"/>
+-->
 
 </link>
 

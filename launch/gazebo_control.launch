@@ -11,4 +11,11 @@
         respawn="false"
         args="theta_1_controller theta_2_controller theta_3_controller joint_state_controller"
     />
+
+    <node
+        name="rqt_gui"
+        pkg="rqt_gui"
+        type="rqt_gui"
+        args="--perspective-file $(find cga_kinematics)/config/rqt_control.perspective"
+    />
 </launch>
