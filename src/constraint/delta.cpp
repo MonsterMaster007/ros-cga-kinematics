@@ -1,16 +1,23 @@
 #include "constraint/delta.h"
-#include "cga/transformations.h"
-#include "cga/constants.h"
-#include "cga/multivector.h"
+#include "cga/operations.h"
+#include "cga/geometry.h"
 
 const cga::Vector to_cga_vector(const urdf::Vector3 &vec)
 {
-    return cga::Vector(vec.x, vec.y, vec.z, 0, 0);
+    cga::Vector result;
+    result.e1(vec.x);
+    result.e2(vec.y);
+    result.e3(vec.z);
+    return result;
 }
 
 const cga::Vector to_cga_vector(const geometry_msgs::Pose::_position_type &vec)
 {
-    return cga::Vector(vec.x, vec.y, vec.z, 0, 0);
+    cga::Vector result;
+    result.e1(vec.x);
+    result.e2(vec.y);
+    result.e3(vec.z);
+    return result;
 }
 
 const double vector_norm(const urdf::Vector3 &vec)
@@ -28,23 +35,23 @@ loop::Delta::Delta(
     s[0] = to_cga_vector(
         model.getJoint(joints.at("theta_1"))->
             parent_to_joint_origin_transform.position);
-    base_radius[0] = cga::Multivector(s[0]).norm();
-    s[0] = cga::Multivector(s[0]).normalized();
-    s_perp[0] = -cga::I3*wedge(cga::e3, s[0]);
+    base_radius[0] = norm(s[0]);
+    s[0] = normalized(s[0]);
+    s_perp[0] = -(cga::I3*outer(cga::e3, s[0])).vector();
 
     s[1] = to_cga_vector(
         model.getJoint(joints.at("theta_2"))->
             parent_to_joint_origin_transform.position);
-    base_radius[1] = cga::Multivector(s[1]).norm();
-    s[1] = s[1].normalized();
-    s_perp[1] = -cga::I3*wedge(cga::e3, s[1]);
+    base_radius[1] = norm(s[1]);
+    s[1] = normalized(s[1]);
+    s_perp[1] = -(cga::I3*outer(cga::e3, s[1])).vector();
 
     s[2] = to_cga_vector(
         model.getJoint(joints.at("theta_3"))->
             parent_to_joint_origin_transform.position);
-    base_radius[2] = cga::Multivector(s[2]).norm();
-    s[2] = s[2].normalized();
-    s_perp[2] = -cga::I3*wedge(cga::e3, s[2]);
+    base_radius[2] = norm(s[2]);
+    s[2] = normalized(s[2]);
+    s_perp[2] = -(cga::I3*outer(cga::e3, s[2])).vector();
 
     ee_radius[0] = vector_norm(
         model.getJoint(joints.at("to_end_effector_1"))->
@@ -102,24 +109,26 @@ bool loop::Delta::apply_fk(std::map<std::string, double> &positions)const
         PiA[i] = A[i] - 0.5*pow(lower_length[i], 2)*cga::ni;
     }
 
-    cga::Multivector T, P, Y, y;
-    T = cga::Multivector(cga::I5)*wedge(PiA[0], wedge(PiA[1], PiA[2]));
+    cga::Bivector T = cga::I5*(PiA[0]^PiA[1]^PiA[2]);
     if ((T*T).scalar() < 0) return false;
 
-    P = 1 + T.normalized();
-    Y = -(P.reverse() * dot(T, cga::ni) * P);
-    y = cga::down(Y.vector());
+    cga::Versor P;
+    P.scalar(1);
+    P.bivector(normalized(T));
+
+    cga::Vector Y = -(reverse(P) * inner(T, cga::ni) * P).vector();
+    cga::Vector y = cga::down(Y);
 
     cga::Vector lower_disp;
     for (std::size_t i = 0; i < 3; i++) {
-        lower_disp = (y - a[i]).vector();
+        lower_disp = y - a[i];
         alpha[i] = atan2(
-            -dot(lower_disp, cga::e3).scalar(),
-            -dot(lower_disp, s[i]).scalar()
+            -inner(lower_disp, cga::e3),
+            -inner(lower_disp, s[i])
         );
         beta[i] = atan2(
-            dot(lower_disp, s_perp[i]).scalar(),
-            -dot(lower_disp, cga::e3).scalar()
+            inner(lower_disp, s_perp[i]),
+            -inner(lower_disp, cga::e3)
         );
     }
 
@@ -144,41 +153,42 @@ bool loop::Delta::apply_ik(const geometry_msgs::Pose &pose, std::map<std::string
 {
     cga::Vector y = to_cga_vector(pose.position);
 
-    std::vector<cga::Vector> C(3);
+    std::vector<cga::Trivector> C(3);
     // Dual spheres, so vectors
     std::vector<cga::Vector> Sigma(3);
 
     for (std::size_t i = 0; i < 3; i++) {
-        C[i] = wedge(
-            (cga::up((base_radius[i]*s[i]).vector()) - 0.5*pow(upper_length[i], 2)*cga::ni),
-            (cga::I3*wedge(s[i], cga::e3))
-        ).vector();
-        Sigma[i] = (cga::up((y + ee_radius[i]*s[i]).vector()) - 0.5*pow(lower_length[i], 2)*cga::ni).vector();
+        C[i] = outer(
+            cga::up(base_radius[i]*s[i] - 0.5*pow(upper_length[i], 2)*cga::ni),
+            (cga::I3*(s[i]^cga::e3)).bivector()
+        );
+        Sigma[i] = cga::up(y + ee_radius[i]*s[i]) - 0.5*pow(lower_length[i], 2)*cga::ni;
     }
 
-    std::vector<cga::Multivector> T(3), P(3), A(3), a(3), z(3);
+    std::vector<cga::Multivector> P(3);
+    std::vector<cga::Vector> T(3), A(3), a(3), z(3);
     for (std::size_t i = 0; i < 3; i++) {
-        T[i] = -wedge(C[i], Sigma[i])*cga::Multivector(cga::I5);
+        T[i] = -dual(outer(C[i], Sigma[i]));
         // Check valid:
         if ((T[i]*T[i]).scalar() < 0) return false;
 
         P[i] = 0.5*(1 + T[i]*(1 / sqrt((T[i]*T[i]).scalar())) );
-        A[i] = -P[i].reverse()*dot(T[i], cga::ni)*P[i];
-        a[i] = cga::down(A[i].vector());
+        A[i] = -(reverse(P[i])*inner(T[i], cga::ni)*P[i]).vector();
+        a[i] = cga::down(A[i]);
         z[i] = a[i] - ee_radius[i]*s[i];
     }
 
     positions[joints.at("theta_1")] = atan2(
-        dot(z[0], cga::e3).scalar(),
-        dot(z[0], s[0]).scalar()
+        inner(z[0], cga::e3),
+        inner(z[0], s[0])
     );
     positions[joints.at("theta_2")] = atan2(
-        dot(z[1], cga::e3).scalar(),
-        dot(z[1], s[1]).scalar()
+        inner(z[1], cga::e3),
+        inner(z[1], s[1])
     );
     positions[joints.at("theta_3")] = atan2(
-        dot(z[2], cga::e3).scalar(),
-        dot(z[2], s[2]).scalar()
+        inner(z[2], cga::e3),
+        inner(z[2], s[2])
     );
 
     return true;

@@ -2,7 +2,7 @@
 #define CONSTRAINT_DELTA_H
 
 #include "constraint/constraint.h"
-#include "cga/vector.h"
+#include "cga/grades.h"
 
 namespace loop {
 
