@@ -111,26 +111,20 @@ bool loop::Delta::apply_fk(std::map<std::string, double> &positions)const
         PiA[i] = A[i] - 0.5*pow(lower_length[i], 2)*cga::ni;
     }
 
-    cga::Bivector T = -(PiA[0]^PiA[1]^PiA[2])*cga::I5;
-    std::cout << "T = " << T << std::endl;
-    std::cout << "T scalar = " << (T*T).scalar() << std::endl;
-    // if ((T*T).scalar() < 0) return false;
+    cga::Bivector T = cga::I5*(PiA[0]^PiA[1]^PiA[2]);
+    if ((T*T).scalar() < 0) return false;
 
     cga::Versor P;
     P.scalar(1);
     P.bivector(T/sqrt((T*T).scalar()));
-    std::cout << "P = " << T << std::endl;
 
     cga::Vector Y = -(reverse(P) * inner(T, cga::ni) * P).vector();
-    std::cout << "Y = " << Y << std::endl;
 
     cga::Vector y = -cga::down(Y);
-    std::cout << "y = " << y << std::endl;
 
     cga::Vector lower_disp;
     for (std::size_t i = 0; i < 3; i++) {
         lower_disp = y - a[i];
-        std::cout << "lower_disp "<<i<<" = " << lower_disp << std::endl;
         alpha[i] = atan2(
             -inner(lower_disp, cga::e3),
             -inner(lower_disp, s[i])
@@ -140,12 +134,6 @@ bool loop::Delta::apply_fk(std::map<std::string, double> &positions)const
             inner(lower_disp, -cos(alpha[i])*s[i]-sin(alpha[i])*cga::e3)
         );
     }
-    std::cout << "alpha 0 = " << alpha[0] << std::endl;
-    std::cout << "alpha 1 = " << alpha[1] << std::endl;
-    std::cout << "alpha 2 = " << alpha[2] << std::endl;
-    std::cout << "beta 0 = " << beta[0] << std::endl;
-    std::cout << "beta 1 = " << beta[1] << std::endl;
-    std::cout << "beta 2 = " << beta[2] << std::endl;
 
     // Put angles in joint_state message
 

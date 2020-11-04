@@ -8,7 +8,6 @@ Panels:
         - /Status1
         - /RobotModel1
         - /TF1
-        - /Axes1
       Splitter Ratio: 0.5
     Tree Height: 734
   - Class: rviz/Selection
@@ -55,7 +54,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 0.699999988079071
+    - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
       Enabled: true
@@ -191,112 +190,19 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        base:
-          Value: true
-        chain_1_end:
-          Value: true
-        chain_2_end:
-          Value: true
-        chain_3_end:
-          Value: true
-        end_effector:
-          Value: true
-        lower_1_L_link:
-          Value: true
-        lower_1_L_link_end:
-          Value: true
-        lower_1_R_link:
-          Value: true
-        lower_1_end:
-          Value: true
-        lower_1_parent:
-          Value: true
-        lower_1_root:
-          Value: true
-        lower_2_L_link:
-          Value: true
-        lower_2_L_link_end:
-          Value: true
-        lower_2_R_link:
-          Value: true
-        lower_2_end:
-          Value: true
-        lower_2_parent:
-          Value: true
-        lower_2_root:
-          Value: true
-        lower_3_L_link:
-          Value: true
-        lower_3_L_link_end:
-          Value: true
-        lower_3_R_link:
-          Value: true
-        lower_3_end:
-          Value: true
-        lower_3_parent:
-          Value: true
-        lower_3_root:
-          Value: true
-        upper_1:
-          Value: true
-        upper_2:
-          Value: true
-        upper_3:
-          Value: true
-        world:
-          Value: true
       Marker Scale: 0.5
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: false
       Tree:
-        world:
-          base:
-            upper_1:
-              lower_1_parent:
-                lower_1_root:
-                  lower_1_L_link:
-                    lower_1_L_link_end:
-                      lower_1_end:
-                        chain_1_end:
-                          end_effector:
-                            {}
-                  lower_1_R_link:
-                    {}
-            upper_2:
-              lower_2_parent:
-                lower_2_root:
-                  lower_2_L_link:
-                    lower_2_L_link_end:
-                      lower_2_end:
-                        chain_2_end:
-                          {}
-                  lower_2_R_link:
-                    {}
-            upper_3:
-              lower_3_parent:
-                lower_3_root:
-                  lower_3_L_link:
-                    lower_3_L_link_end:
-                      lower_3_end:
-                        chain_3_end:
-                          {}
-                  lower_3_R_link:
-                    {}
+        {}
       Update Interval: 0
-      Value: true
-    - Class: rviz/Axes
-      Enabled: true
-      Length: 0.5
-      Name: Axes
-      Radius: 0.009999999776482582
-      Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -325,25 +231,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.847761869430542
+      Distance: 2.166750431060791
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.032725702971220016
-        Y: 0.0570996068418026
-        Z: -0.41989371180534363
+        X: -0.22423507273197174
+        Y: 0.1080135852098465
+        Z: -0.5456244349479675
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.0702029466629028
+      Pitch: 0.7402033805847168
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.4572491645812988
+      Yaw: 5.562271595001221
     Saved: ~
 Window Geometry:
   Displays:
